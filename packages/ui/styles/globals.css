@@ -120,3 +120,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Tech landing page animations */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes slowPan {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.05) translateY(-2%); }
+  100% { transform: scale(1) translateY(0); }
+}
+@keyframes slowRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-gradient-text { animation: gradientShift 8s ease-in-out infinite; }
+.animate-marquee { animation: marquee 18s linear infinite; }
+.animate-slow-pan { animation: slowPan 22s ease-in-out infinite; }
+.animate-slow-rotate { animation: slowRotate 30s linear infinite; }
