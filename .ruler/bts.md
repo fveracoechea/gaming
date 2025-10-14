@@ -13,7 +13,7 @@ This is a monorepo with the following structure:
 - **`packages/api/`** - Shared API logic and types
 - **`packages/auth/`** - Authentication logic and utilities
 - **`packages/db/`** - Database schema and utilities
-
+- **`packages/ui/`** - Shadcn component library with utils, hooks and theming
 
 ## Available Scripts
 
@@ -40,6 +40,7 @@ Database schema files are located in `apps/server/src/db/schema/`
 ## Authentication
 
 Authentication is enabled in this project:
+
 - Server auth logic is in `apps/server/src/lib/auth.ts`
 - Web app auth client is in `apps/web/src/lib/auth-client.ts`
 
@@ -53,6 +54,7 @@ add
 ```
 
 Available addons you can add:
+
 - **Documentation**: Starlight, Fumadocs
 - **Linting**: Biome, Oxlint, Ultracite
 - **Other**: Ruler, Turborepo, PWA, Tauri, Husky
@@ -61,9 +63,11 @@ You can also add web deployment configurations like Cloudflare Workers support.
 
 ## Project Configuration
 
-This project includes a `bts.jsonc` configuration file that stores your Better-T-Stack settings:
+This project includes a `bts.jsonc` configuration file that stores your
+Better-T-Stack settings:
 
-- Contains your selected stack configuration (database, ORM, backend, frontend, etc.)
+- Contains your selected stack configuration (database, ORM, backend, frontend,
+  etc.)
 - Used by the CLI to understand your project structure
 - Safe to delete if not needed
 - Updated automatically when using the `add` command
