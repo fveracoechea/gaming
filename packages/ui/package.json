@@ -4,7 +4,7 @@
     "./components/*": "./components/*.tsx",
     "./lib/*": "./lib/*.ts",
     "./hooks/*": "./hooks/*.ts",
-    "./styles.css": "./styles/globals.css"
+    "./theme.css": "./styles/theme.css"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
