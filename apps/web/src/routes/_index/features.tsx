@@ -66,7 +66,7 @@ export function Features() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group border-border/50 bg-muted p-6 transition-colors hover:border-primary/50"
+              className="group border-border p-6 transition-colors hover:border-primary"
             >
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                 <feature.icon className="h-6 w-6" />

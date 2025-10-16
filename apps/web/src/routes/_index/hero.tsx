@@ -3,14 +3,35 @@ import { ArrowRight, Play } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
-      {/* Background gradient effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[120px]" />
-        <div className="absolute top-20 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/20 blur-[100px]" />
-      </div>
+    <section className="aspect-auto lg:aspect-video relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+      {/* Background video */}
+      <video
+        className="absolute inset-0 pointer-events-none h-full w-full object-cover brightness-95 contrast-105 motion-safe:block"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source
+          src="/home-v1.mp4"
+          type="video/mp4"
+        />
+        <source
+          src="/home-mobile.mp4"
+          type="video/mp4"
+          media="(min-width: 640px)"
+        />
+      </video>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
+
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 pointer-events-none bg-g bg-gradient-to-r from-primary/20 to-accent/20" />
+
+      <div className="dark relative container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-6 inline-flex items-center gap-2">
             <span className="rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted-foreground">
@@ -24,7 +45,7 @@ export function Hero() {
             </span>
           </div>
 
-          <h1 className="mb-6 text-5xl leading-tight font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl">
+          <h1 className="mb-6 text-5xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl">
             The complete platform to{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               run esports tournaments
@@ -45,6 +66,7 @@ export function Hero() {
             <Button
               size="xl"
               variant="outline"
+              className="font-semibold"
             >
               <Play className="mr-2 h-4 w-4" />
               <span>Watch Demo</span>

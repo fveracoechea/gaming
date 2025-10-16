@@ -15,8 +15,8 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
-          <Link to="/" className="flex items-center gap-2 group">
-            <ArrowLeftIcon className="h-5 w-5 text-muted-foreground mr-2 transition-transform group-hover:translate-x-1" />
+          <Link to="/" className="group flex items-center gap-2">
+            <ArrowLeftIcon className="mr-2 h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <TrophyIcon className="h-5 w-5 text-primary-foreground" />
             </div>
@@ -29,11 +29,13 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
           </div>
         </div>
       </div>
-      <div className="bg-muted relative hidden lg:block">
+      <div className="relative hidden bg-muted lg:block">
         <img
           src={imageSrc}
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover brightness-50 blur-[1px]"
+          width={720}
+          height={900}
+          className="absolute inset-0 h-full w-full object-cover blur-[1px] brightness-50"
         />
       </div>
     </div>
