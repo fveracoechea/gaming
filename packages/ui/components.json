@@ -12,7 +12,7 @@
   },
   "aliases": {
     "ui": "components",
-    "components": "@gaming/ui/components",
+    "components": "components/blocks",
     "utils": "@gaming/ui/lib/utils",
     "lib": "lib",
     "hooks": "hooks"

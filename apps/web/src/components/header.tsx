@@ -1,6 +1,6 @@
 import { Button } from "@gaming/ui/components/button";
 import { TrophyIcon } from "lucide-react";
-import { Link } from "react-router";
+import { href, Link } from "react-router";
 
 export function Header() {
   return (
@@ -42,8 +42,15 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-              Sign In
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden sm:inline-flex"
+              asChild
+            >
+              <Link to={href("/sign-in")}>
+                Sign In
+              </Link>
             </Button>
             <Button size="sm">Get Started</Button>
           </div>

@@ -8,6 +8,8 @@
 !.yarn/releases
 !.yarn/versions
 
+!apps/web/src/route
+
 # Testing
 /coverage
 

@@ -51,7 +51,7 @@ export function Footer() {
               {footerLinks.product.map((link) => (
                 <li key={link.label}>
                   <Link
-                    href={link.href}
+                    to={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
@@ -83,7 +83,7 @@ export function Footer() {
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
                   <Link
-                    href={link.href}
+                    to={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
