@@ -117,6 +117,7 @@
     "packages/db": {
       "name": "@gaming/db",
       "dependencies": {
+        "@gaming/zod": "workspace:*",
         "dotenv": "catalog:",
         "drizzle-orm": "catalog:",
         "pg": "catalog:",
@@ -152,6 +153,20 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "typescript": "catalog:",
+      },
+    },
+    "packages/zod": {
+      "name": "@gaming/zod",
+      "dependencies": {
+        "better-auth": "catalog:",
+        "dotenv": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "tsdown": "catalog:",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
       },
     },
   },
@@ -347,6 +362,8 @@
     "@gaming/db": ["@gaming/db@workspace:packages/db"],
 
     "@gaming/ui": ["@gaming/ui@workspace:packages/ui"],
+
+    "@gaming/zod": ["@gaming/zod@workspace:packages/zod"],
 
     "@hexagon/base64": ["@hexagon/base64@1.1.28", "", {}, "sha512-lhqDEAvWixy3bZ+UOYbPwUbBkwBq5C1LAJ/xPC8Oi+lL54oyakv/npbA0aU2hgCsx/1NUd4IBvV03+aUBWxerw=="],
 

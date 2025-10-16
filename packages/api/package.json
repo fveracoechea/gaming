@@ -2,8 +2,8 @@
   "name": "@gaming/api",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/_index.d.ts",
+      "default": "./src/_index.ts"
     },
     "./*": {
       "types": "./dist/*.d.ts",

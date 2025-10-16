@@ -1,5 +1,5 @@
 {
-  "name": "@gaming/auth",
+  "name": "@gaming/zod",
   "exports": {
     ".": {
       "types": "./dist/_index.d.ts",
@@ -23,7 +23,6 @@
   "dependencies": {
     "better-auth": "catalog:",
     "dotenv": "catalog:",
-    "zod": "catalog:",
-    "@gaming/db": "workspace:*"
+    "zod": "catalog:"
   }
 }
