@@ -1,175 +1,178 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  integer,
-  boolean,
-} from "drizzle-orm/pg-core";
+import * as t from "drizzle-orm/pg-core";
 import { user } from "./auth";
-import type { TournamentFormat, TournamentStatus } from "@gaming/zod/tournaments";
+import type {
+  DotaLobbyState,
+  TournamentEntryPaymentStatus,
+  TournamentFormat,
+  TournamentMatchStatus,
+  TournamentParticipantStatus,
+  TournamentPayoutStatus,
+  TournamentStatus,
+} from "@gaming/zod/tournaments";
+import { sql } from "drizzle-orm";
 
-// Use text columns with $type to infer union types from Zod definitions (no DB enums)
+const timestamps = {
+  createdAt: t
+    .timestamp({ withTimezone: true, mode: "date" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: t
+    .timestamp({ withTimezone: true, mode: "date" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdate(() => new Date()),
+};
+
+/**
+ * Shared primary key column (text UUID)
+ */
+const id = t
+  .text()
+  .primaryKey()
+  .$defaultFn(() => crypto.randomUUID());
 
 // Games supported by the platform (e.g. Dota2, others in future)
-export const game = pgTable("game", {
-  id: text("id").primaryKey(), // e.g. "dota2"
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+export const game = t.pgTable("game", {
+  id, // e.g. "dota2" if manually set; defaults to UUID
+  name: t.text().notNull(),
+  slug: t.text().notNull().unique(),
+  ...timestamps,
 });
 
-// Core tournament entity
-export const tournament = pgTable("tournament", {
-  id: text("id").primaryKey(),
-  organizerId: text("organizer_id")
+export const tournament = t.pgTable("tournament", {
+  id,
+  organizerId: t
+    .text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  gameId: text("game_id")
+  gameId: t
+    .text()
     .notNull()
     .references(() => game.id, { onDelete: "restrict" }),
-  title: text("title").notNull(),
-  description: text("description"),
-  region: text("region"),
-  format: text("format").$type<TournamentFormat>().notNull(),
-  status: text("status").$type<TournamentStatus>().notNull().default("DRAFT"),
-  entryFeeCents: integer("entry_fee_cents").default(0).notNull(), // 0 = free
-  prizePoolLogic: text("prize_pool_logic"), // description / formula reference
-  registrationLimit: integer("registration_limit"),
-  inviteOnly: boolean("invite_only").default(false).notNull(),
-  startsAt: timestamp("starts_at"),
-  endsAt: timestamp("ends_at"),
-  registrationOpensAt: timestamp("registration_opens_at"),
-  registrationClosesAt: timestamp("registration_closes_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  publishedAt: timestamp("published_at"),
+  title: t.text().notNull(),
+  description: t.text(),
+  region: t.text(),
+  format: t.text().$type<TournamentFormat>().notNull(),
+  status: t.text().$type<TournamentStatus>().notNull().default("DRAFT"),
+  entryFeeCents: t.integer().default(0).notNull(),
+  prizePoolLogic: t.text(),
+  registrationLimit: t.integer(),
+  inviteOnly: t.boolean().default(false).notNull(),
+  startsAt: t.timestamp(),
+  endsAt: t.timestamp(),
+  registrationOpensAt: t.timestamp(),
+  registrationClosesAt: t.timestamp(),
+  publishedAt: t.timestamp(),
+  ...timestamps,
 });
 
-// Optional invite list for invite-only tournaments
-export const tournamentInvite = pgTable("tournament_invite", {
-  id: text("id").primaryKey(),
-  tournamentId: text("tournament_id")
+export const tournamentInvite = t.pgTable("tournament_invite", {
+  id,
+  tournamentId: t
+    .text()
     .notNull()
     .references(() => tournament.id, { onDelete: "cascade" }),
-  userId: text("user_id")
+  userId: t
+    .text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  ...timestamps,
 });
 
-// Participant registration
-export const tournamentParticipant = pgTable("tournament_participant", {
-  id: text("id").primaryKey(),
-  tournamentId: text("tournament_id")
+export const tournamentParticipant = t.pgTable("tournament_participant", {
+  id,
+  tournamentId: t
+    .text()
     .notNull()
     .references(() => tournament.id, { onDelete: "cascade" }),
-  userId: text("user_id")
+  userId: t
+    .text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  status: text("status").notNull().default("registered"), // domain-specific participant status (lowercase acceptable)
-  placement: integer("placement"), // final placement (1 = winner)
-  earningsCents: integer("earnings_cents").default(0).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+  status: t.text().$type<TournamentParticipantStatus>().notNull().default(
+    "REGISTERED",
+  ),
+  placement: t.integer(),
+  earningsCents: t.integer().default(0).notNull(),
+  ...timestamps,
 });
 
-// Matches within a tournament bracket
-export const tournamentMatch = pgTable("tournament_match", {
-  id: text("id").primaryKey(),
-  tournamentId: text("tournament_id")
+export const tournamentMatch = t.pgTable("tournament_match", {
+  id,
+  tournamentId: t
+    .text()
     .notNull()
     .references(() => tournament.id, { onDelete: "cascade" }),
-  round: integer("round"), // depends on format
-  sequence: integer("sequence"), // ordering inside a round
-  status: text("status").notNull().default("pending"), // pending, in_progress, completed, canceled
-  winnerParticipantId: text("winner_participant_id").references(
+  round: t.integer(),
+  sequence: t.integer(),
+  status: t.text().$type<TournamentMatchStatus>().notNull().default("PENDING"),
+  winnerParticipantId: t.text().references(
     () => tournamentParticipant.id,
     { onDelete: "set null" },
   ),
-  // Dota 2 integration fields
-  dotaMatchId: text("dota_match_id"), // internal GC / lobby match id
-  openDotaMatchId: text("open_dota_match_id"), // external API reference
-  replayUrl: text("replay_url"),
-  startedAt: timestamp("started_at"),
-  completedAt: timestamp("completed_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+  dotaMatchId: t.text(),
+  openDotaMatchId: t.text(),
+  replayUrl: t.text(),
+  startedAt: t.timestamp(),
+  completedAt: t.timestamp(),
+  ...timestamps,
 });
 
-// Participants per match (supports more than 2 for round-robin / league)
-export const tournamentMatchParticipant = pgTable("tournament_match_participant", {
-  id: text("id").primaryKey(),
-  matchId: text("match_id")
+export const tournamentMatchParticipant = t.pgTable(
+  "tournament_match_participant",
+  {
+    id,
+    matchId: t
+      .text()
+      .notNull()
+      .references(() => tournamentMatch.id, { onDelete: "cascade" }),
+    participantId: t
+      .text()
+      .notNull()
+      .references(() => tournamentParticipant.id, { onDelete: "cascade" }),
+    seed: t.integer(),
+    score: t.integer().default(0).notNull(),
+    ...timestamps,
+  },
+);
+
+export const dotaLobby = t.pgTable("dota_lobby", {
+  id,
+  matchId: t
+    .text()
     .notNull()
     .references(() => tournamentMatch.id, { onDelete: "cascade" }),
-  participantId: text("participant_id")
+  name: t.text(),
+  password: t.text(),
+  state: t.text().$type<DotaLobbyState>().notNull().default("CREATING"),
+  ...timestamps,
+});
+
+export const tournamentEntryPayment = t.pgTable("tournament_entry_payment", {
+  id,
+  participantId: t
+    .text()
     .notNull()
     .references(() => tournamentParticipant.id, { onDelete: "cascade" }),
-  seed: integer("seed"), // seeding position in bracket
-  score: integer("score").default(0).notNull(), // game-specific score
+  amountCents: t.integer().notNull(),
+  stripePaymentIntentId: t.text(),
+  status: t.text().$type<TournamentEntryPaymentStatus>().notNull().default(
+    "PENDING",
+  ),
+  ...timestamps,
 });
 
-// Dota 2 lobby metadata (created via Go microservice)
-export const dotaLobby = pgTable("dota_lobby", {
-  id: text("id").primaryKey(), // lobby identifier (custom uuid)
-  matchId: text("match_id")
-    .notNull()
-    .references(() => tournamentMatch.id, { onDelete: "cascade" }),
-  name: text("name"),
-  password: text("password"),
-  state: text("state").notNull().default("creating"), // creating, ready, started, ended, failed
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-});
-
-// Entry fee payment records (escrow model). Payouts tracked separately.
-export const tournamentEntryPayment = pgTable("tournament_entry_payment", {
-  id: text("id").primaryKey(),
-  participantId: text("participant_id")
-    .notNull()
-    .references(() => tournamentParticipant.id, { onDelete: "cascade" }),
-  amountCents: integer("amount_cents").notNull(),
-  stripePaymentIntentId: text("stripe_payment_intent_id"),
-  status: text("status").notNull().default("pending"), // pending, succeeded, failed, refunded
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-});
-
-// Payout distribution after tournament completion
-export const tournamentPayout = pgTable("tournament_payout", {
-  id: text("id").primaryKey(),
-  tournamentId: text("tournament_id")
+export const tournamentPayout = t.pgTable("tournament_payout", {
+  id,
+  tournamentId: t
+    .text()
     .notNull()
     .references(() => tournament.id, { onDelete: "cascade" }),
-  participantId: text("participant_id").references(() => tournamentParticipant.id, {
+  participantId: t.text().references(() => tournamentParticipant.id, {
     onDelete: "set null",
   }),
-  organizerId: text("organizer_id").references(() => user.id, { onDelete: "set null" }),
-  type: text("type").notNull(), // winner, organizer, platform, bonus
-  amountCents: integer("amount_cents").notNull(),
-  status: text("status").notNull().default("pending"), // pending, queued, paid, failed
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+  organizerId: t.text().references(() => user.id, { onDelete: "set null" }),
+  type: t.text().notNull(),
+  amountCents: t.integer().notNull(),
+  status: t.text().$type<TournamentPayoutStatus>().notNull().default("PENDING"),
+  ...timestamps,
 });
