@@ -35,8 +35,10 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
           alt="Image"
           width={720}
           height={900}
-          className="absolute inset-0 h-full w-full object-cover blur-[1px] brightness-50"
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
+        <div className="absolute inset-0 pointer-events-none bg-g bg-gradient-to-r from-primary/20 to-accent/20" />
       </div>
     </div>
   );

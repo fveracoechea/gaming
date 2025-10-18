@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 
 export * as schema from "./schema/_index";
+
 import * as schema from "./schema/_index";
 
 export const db = drizzle({

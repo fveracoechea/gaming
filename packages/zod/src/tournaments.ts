@@ -10,6 +10,9 @@ export const TournamentFormatEnum = z.enum([
 ]);
 export type TournamentFormat = z.infer<typeof TournamentFormatEnum>;
 
+export const TournamentTypeEnum = z.enum(["PUBLIC", "INVITE_ONLY"]);
+export type TournamentType = z.infer<typeof TournamentTypeEnum>;
+
 // High-level tournament lifecycle statuses
 export const TournamentStatusEnum = z.enum([
   "DRAFT",
@@ -36,17 +39,6 @@ export type TournamentParticipantStatus = z.infer<
   typeof TournamentParticipantStatusEnum
 >;
 
-// Match status values within a tournament bracket/round
-export const TournamentMatchStatusEnum = z.enum([
-  "PENDING", // created but not started
-  "READY", // all participants ready / lobby prepared
-  "IN_PROGRESS", // match ongoing
-  "COMPLETED", // finished with a winner
-  "CANCELED", // intentionally canceled before completion
-  "VOID", // invalidated / discarded result
-]);
-export type TournamentMatchStatus = z.infer<typeof TournamentMatchStatusEnum>;
-
 // State of a Dota (or game) lobby orchestration
 export const DotaLobbyStateEnum = z.enum([
   "CREATING", // initial provisioning
@@ -59,30 +51,3 @@ export const DotaLobbyStateEnum = z.enum([
 ]);
 
 export type DotaLobbyState = z.infer<typeof DotaLobbyStateEnum>;
-
-// Entry payment status values
-export const TournamentEntryPaymentStatusEnum = z.enum([
-  "PENDING", // intent created, awaiting confirmation
-  "PROCESSING", // payment processor working
-  "SUCCEEDED", // funds captured successfully
-  "FAILED", // failed without capture
-  "CANCELED", // manually canceled before success
-  "REFUNDED", // refunded post success
-]);
-
-export type TournamentEntryPaymentStatus = z.infer<
-  typeof TournamentEntryPaymentStatusEnum
->;
-
-// Payout status for distributing winnings
-export const TournamentPayoutStatusEnum = z.enum([
-  "PENDING", // scheduled to be processed
-  "PROCESSING", // in progress with provider
-  "COMPLETED", // funds delivered
-  "FAILED", // failed attempt
-  "CANCELED", // canceled before completion
-]);
-
-export type TournamentPayoutStatus = z.infer<
-  typeof TournamentPayoutStatusEnum
->;
