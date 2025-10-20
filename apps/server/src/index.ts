@@ -5,7 +5,7 @@ import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { RPCHandler } from "@orpc/server/fetch";
 import { onError } from "@orpc/server";
 import { createContext } from "@gaming/api/context";
-import { appRouter } from "@gaming/api/routers/index";
+import { appRouter } from "@gaming/api/routers";
 import { auth } from "@gaming/auth";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
