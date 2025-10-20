@@ -17,132 +17,151 @@ import {
 import { SearchForm } from './search-form';
 import { VersionSwitcher } from './version-switcher';
 
-// This is sample data.
 const data = {
-  versions: ['Dota 2', 'CS2', 'Aplex Legends'],
+  versions: ['Dota 2', 'CS2', 'Apex Legends'],
   navMain: [
     {
-      title: 'Getting Started',
-      url: '#',
+      title: 'Dashboard',
+      url: '/dashboard',
       items: [
         {
-          title: 'Installation',
-          url: '#',
-        },
-        {
-          title: 'Project Structure',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Building Your Application',
-      url: '#',
-      items: [
-        {
-          title: 'Routing',
-          url: '#',
-        },
-        {
-          title: 'Data Fetching',
-          url: '#',
+          title: 'Overview',
+          url: '/dashboard',
           isActive: true,
         },
         {
-          title: 'Rendering',
-          url: '#',
+          title: 'My Profile',
+          url: '/dashboard/profile',
         },
         {
-          title: 'Caching',
-          url: '#',
+          title: 'My Stats',
+          url: '/dashboard/stats',
         },
         {
-          title: 'Styling',
-          url: '#',
-        },
-        {
-          title: 'Optimizing',
-          url: '#',
-        },
-        {
-          title: 'Configuring',
-          url: '#',
-        },
-        {
-          title: 'Testing',
-          url: '#',
-        },
-        {
-          title: 'Authentication',
-          url: '#',
-        },
-        {
-          title: 'Deploying',
-          url: '#',
-        },
-        {
-          title: 'Upgrading',
-          url: '#',
-        },
-        {
-          title: 'Examples',
-          url: '#',
+          title: 'Earnings',
+          url: '/dashboard/earnings',
         },
       ],
     },
     {
-      title: 'API Reference',
-      url: '#',
+      title: 'Tournaments',
+      url: '/tournaments',
       items: [
         {
-          title: 'Components',
-          url: '#',
+          title: 'Browse All',
+          url: '/tournaments',
         },
         {
-          title: 'File Conventions',
-          url: '#',
+          title: 'My Tournaments',
+          url: '/tournaments/my-tournaments',
         },
         {
-          title: 'Functions',
-          url: '#',
+          title: 'Create Tournament',
+          url: '/tournaments/create',
         },
         {
-          title: 'next.config.js Options',
-          url: '#',
+          title: 'Tournament History',
+          url: '/tournaments/history',
         },
         {
-          title: 'CLI',
-          url: '#',
-        },
-        {
-          title: 'Edge Runtime',
-          url: '#',
+          title: 'Featured Events',
+          url: '/tournaments/featured',
         },
       ],
     },
     {
-      title: 'Architecture',
-      url: '#',
+      title: 'Teams & Players',
+      url: '/teams',
       items: [
         {
-          title: 'Accessibility',
-          url: '#',
+          title: 'Find Teams',
+          url: '/teams',
         },
         {
-          title: 'Fast Refresh',
-          url: '#',
+          title: 'My Team',
+          url: '/teams/my-team',
         },
         {
-          title: 'Next.js Compiler',
-          url: '#',
+          title: 'Create Team',
+          url: '/teams/create',
         },
         {
-          title: 'Supported Browsers',
-          url: '#',
+          title: 'Player Directory',
+          url: '/players',
         },
         {
-          title: 'Turbopack',
-          url: '#',
+          title: 'Leaderboards',
+          url: '/leaderboards',
+        },
+      ],
+    },
+    {
+      title: 'Matches & Results',
+      url: '/matches',
+      items: [
+        {
+          title: 'Live Matches',
+          url: '/matches/live',
+        },
+        {
+          title: 'Match History',
+          url: '/matches/history',
+        },
+        {
+          title: 'Results & Brackets',
+          url: '/matches/results',
+        },
+        {
+          title: 'Replays',
+          url: '/matches/replays',
+        },
+      ],
+    },
+    {
+      title: 'Organizer Tools',
+      url: '/organizer',
+      items: [
+        {
+          title: 'Event Management',
+          url: '/organizer/events',
+        },
+        {
+          title: 'Lobby Control',
+          url: '/organizer/lobbies',
+        },
+        {
+          title: 'Registration Management',
+          url: '/organizer/registrations',
+        },
+        {
+          title: 'Payout Management',
+          url: '/organizer/payouts',
+        },
+        {
+          title: 'Analytics',
+          url: '/organizer/analytics',
+        },
+      ],
+    },
+    {
+      title: 'Financial',
+      url: '/financial',
+      items: [
+        {
+          title: 'Payment History',
+          url: '/financial/payments',
+        },
+        {
+          title: 'Prize Pool Status',
+          url: '/financial/prize-pools',
+        },
+        {
+          title: 'Refunds & Disputes',
+          url: '/financial/refunds',
+        },
+        {
+          title: 'Tax Documents',
+          url: '/financial/tax-documents',
         },
       ],
     },
