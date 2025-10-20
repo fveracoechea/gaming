@@ -1,5 +1,5 @@
-import { Button } from "@gaming/ui/components/button";
-import { ArrowRight } from "lucide-react";
+import { Button } from '@gaming/ui/components/button';
+import { ArrowRight } from 'lucide-react';
 
 export function CTA() {
   return (
@@ -16,20 +16,15 @@ export function CTA() {
             Ready to elevate your tournaments?
           </h2>
           <p className="mb-8 text-lg text-muted-foreground text-balance">
-            Join thousands of organizers running professional esports events
-            with BattleStage. Start your free trial today, no credit card
-            required!
+            Join thousands of organizers running professional esports events with BattleStage.
+            Start your free trial today, no credit card required!
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button size="lg" className="group h-12 px-8 text-base">
               Start Free Trial
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-12 px-8 text-base bg-transparent"
-            >
+            <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent">
               Schedule Demo
             </Button>
           </div>

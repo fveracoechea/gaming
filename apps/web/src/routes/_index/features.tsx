@@ -1,51 +1,43 @@
-import { Card } from "@gaming/ui/components/card";
-
-import {
-  DollarSign,
-  Shield,
-  TrendingUp,
-  Trophy,
-  Users,
-  Zap,
-} from "lucide-react";
+import { Card } from '@gaming/ui/components/card';
+import { DollarSign, Shield, TrendingUp, Trophy, Users, Zap } from 'lucide-react';
 
 export function Features() {
   const features = [
     {
       icon: Zap,
-      title: "Automated Tournament Setup",
+      title: 'Automated Tournament Setup',
       description:
-        "Create Dota 2, CS2, or Apex Legends tournaments in minutes. Automated bracket generation, seeding, and match scheduling.",
+        'Create Dota 2, CS2, or Apex Legends tournaments in minutes. Automated bracket generation, seeding, and match scheduling.',
     },
     {
       icon: Shield,
-      title: "Steam API Validation",
+      title: 'Steam API Validation',
       description:
-        "Verify match results automatically through Steam API integration. No more disputes or manual verification needed.",
+        'Verify match results automatically through Steam API integration. No more disputes or manual verification needed.',
     },
     {
       icon: DollarSign,
-      title: "Instant Payouts",
+      title: 'Instant Payouts',
       description:
-        "Automatic prize distribution via Stripe Connect. Winners receive payouts instantly after tournament completion.",
+        'Automatic prize distribution via Stripe Connect. Winners receive payouts instantly after tournament completion.',
     },
     {
       icon: Trophy,
-      title: "Prize Pool Crowdfunding",
+      title: 'Prize Pool Crowdfunding',
       description:
-        "Boost prize pools with integrated donation tiers and milestones. Viewers can contribute in real-time during tournaments.",
+        'Boost prize pools with integrated donation tiers and milestones. Viewers can contribute in real-time during tournaments.',
     },
     {
       icon: TrendingUp,
-      title: "Team Stats & Insights",
+      title: 'Team Stats & Insights',
       description:
-        "Comprehensive dashboards with match data, performance trends, and analytics for players and organizers.",
+        'Comprehensive dashboards with match data, performance trends, and analytics for players and organizers.',
     },
     {
       icon: Users,
-      title: "Player Registration",
+      title: 'Player Registration',
       description:
-        "Streamlined registration system with team management, player verification, and automated check-ins.",
+        'Streamlined registration system with team management, player verification, and automated check-ins.',
     },
   ];
 
@@ -57,8 +49,8 @@ export function Features() {
             Everything you need to run professional tournaments
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-balance">
-            From registration to payouts, we handle the complexity so you can
-            focus on creating amazing competitive experiences.
+            From registration to payouts, we handle the complexity so you can focus on creating
+            amazing competitive experiences.
           </p>
         </div>
 

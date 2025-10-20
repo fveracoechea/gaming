@@ -1,8 +1,9 @@
-import z from "zod";
-import { eq } from "drizzle-orm";
-import { db } from "@gaming/db";
-import { todo } from "@gaming/db/schema/todo";
-import { publicProcedure } from "../index";
+import { db } from '@gaming/db';
+import { todo } from '@gaming/db/schema/todo';
+import { eq } from 'drizzle-orm';
+import z from 'zod';
+
+import { publicProcedure } from '../index';
 
 export const todoRouter = {
   getAll: publicProcedure.handler(async () => {
@@ -26,9 +27,7 @@ export const todoRouter = {
         .where(eq(todo.id, input.id));
     }),
 
-  delete: publicProcedure
-    .input(z.object({ id: z.number() }))
-    .handler(async ({ input }) => {
-      return await db.delete(todo).where(eq(todo.id, input.id));
-    }),
+  delete: publicProcedure.input(z.object({ id: z.number() })).handler(async ({ input }) => {
+    return await db.delete(todo).where(eq(todo.id, input.id));
+  }),
 };

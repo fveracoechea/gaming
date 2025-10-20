@@ -1,18 +1,19 @@
-import { cn } from "@gaming/ui/lib/utils";
-import { Button } from "@gaming/ui/components/button";
+import { Link, href } from 'react-router';
+
+import { Button } from '@gaming/ui/components/button';
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@gaming/ui/components/field";
-import { Input } from "@gaming/ui/components/input";
-import { href, Link } from "react-router";
+} from '@gaming/ui/components/field';
+import { Input } from '@gaming/ui/components/input';
+import { cn } from '@gaming/ui/lib/utils';
 
 export default function SignupForm({}) {
   return (
-    <form className={cn("flex flex-col gap-6")}>
+    <form className={cn('flex flex-col gap-6')}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Sign Up</h1>
@@ -28,16 +29,13 @@ export default function SignupForm({}) {
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input id="email" type="email" placeholder="m@example.com" required />
           <FieldDescription>
-            We&apos;ll use this to contact you. We will not share your email
-            with anyone else.
+            We&apos;ll use this to contact you. We will not share your email with anyone else.
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
           <Input id="password" type="password" required />
-          <FieldDescription>
-            Must be at least 8 characters long.
-          </FieldDescription>
+          <FieldDescription>Must be at least 8 characters long.</FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
@@ -59,7 +57,7 @@ export default function SignupForm({}) {
             Sign up with GitHub
           </Button>
           <FieldDescription className="px-6 text-center">
-            Already have an account? <Link to={href("/sign-in")}>Sign in</Link>
+            Already have an account? <Link to={href('/sign-in')}>Sign in</Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

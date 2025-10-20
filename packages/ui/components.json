@@ -12,8 +12,8 @@
   },
   "aliases": {
     "ui": "components",
-    "components": "components/blocks",
-    "utils": "@gaming/ui/lib/utils",
+    "components": "blocks",
+    "utils": "@/lib/utils",
     "lib": "lib",
     "hooks": "hooks"
   },

@@ -1,13 +1,13 @@
-import { sql } from "drizzle-orm";
-import * as t from "drizzle-orm/pg-core";
+import { sql } from 'drizzle-orm';
+import * as t from 'drizzle-orm/pg-core';
 
 export const timestamps = {
   createdAt: t
-    .timestamp({ withTimezone: true, mode: "date" })
+    .timestamp({ withTimezone: true, mode: 'date' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: t
-    .timestamp({ withTimezone: true, mode: "date" })
+    .timestamp({ withTimezone: true, mode: 'date' })
     .default(sql`CURRENT_TIMESTAMP`)
     .$onUpdate(() => new Date()),
 };

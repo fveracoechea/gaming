@@ -1,30 +1,30 @@
-import { Card } from "@gaming/ui/components/card";
+import { Card } from '@gaming/ui/components/card';
 
 export function HowItWorks() {
   const steps = [
     {
-      step: "01",
-      title: "Create Your Tournament",
+      step: '01',
+      title: 'Create Your Tournament',
       description:
-        "Choose your game (Dota 2, CS2, or Apex Legends), set rules, and configure bracket format in minutes.",
+        'Choose your game (Dota 2, CS2, or Apex Legends), set rules, and configure bracket format in minutes.',
     },
     {
-      step: "02",
-      title: "Players Register",
+      step: '02',
+      title: 'Players Register',
       description:
-        "Teams sign up through your custom tournament page. Steam accounts are automatically verified.",
+        'Teams sign up through your custom tournament page. Steam accounts are automatically verified.',
     },
     {
-      step: "03",
-      title: "Matches Run Automatically",
+      step: '03',
+      title: 'Matches Run Automatically',
       description:
-        "Brackets update in real-time. Match results are validated through Steam API integration.",
+        'Brackets update in real-time. Match results are validated through Steam API integration.',
     },
     {
-      step: "04",
-      title: "Winners Get Paid",
+      step: '04',
+      title: 'Winners Get Paid',
       description:
-        "Prize money is distributed instantly via Stripe Connect. No manual processing required.",
+        'Prize money is distributed instantly via Stripe Connect. No manual processing required.',
     },
   ];
 
@@ -36,8 +36,8 @@ export function HowItWorks() {
             Run tournaments in four simple steps
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-balance">
-            Our platform handles all the technical complexity, so you can focus
-            on creating great competitive experiences.
+            Our platform handles all the technical complexity, so you can focus on creating
+            great competitive experiences.
           </p>
         </div>
 
@@ -53,9 +53,7 @@ export function HowItWorks() {
                 </div>
                 <div className="lg:pl-8">
                   <h3 className="mb-3 text-2xl font-semibold">{step.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {step.description}
-                  </p>
+                  <p className="text-muted-foreground leading-relaxed">{step.description}</p>
                 </div>
               </Card>
             ))}

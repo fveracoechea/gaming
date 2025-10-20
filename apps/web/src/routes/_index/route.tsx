@@ -1,11 +1,11 @@
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Footer } from '@/components/footer';
+import { Header } from '@/components/header';
 
-import { Hero } from "./hero";
-import { Stats } from "./stats";
-import { Features } from "./features";
-import { HowItWorks } from "./how-it-works";
-import { CTA } from "./cta";
+import { CTA } from './cta';
+import { Features } from './features';
+import { Hero } from './hero';
+import { HowItWorks } from './how-it-works';
+import { Stats } from './stats';
 
 export default function Homepage() {
   return (

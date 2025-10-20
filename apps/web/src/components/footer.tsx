@@ -1,31 +1,32 @@
-import { Trophy } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from 'react-router';
+
+import { Trophy } from 'lucide-react';
 
 export function Footer() {
   const footerLinks = {
     product: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "API", href: "#api" },
-      { label: "Integrations", href: "#integrations" },
+      { label: 'Features', href: '#features' },
+      { label: 'Pricing', href: '#pricing' },
+      { label: 'API', href: '#api' },
+      { label: 'Integrations', href: '#integrations' },
     ],
     company: [
-      { label: "About", href: "#about" },
-      { label: "Blog", href: "#blog" },
-      { label: "Careers", href: "#careers" },
-      { label: "Contact", href: "#contact" },
+      { label: 'About', href: '#about' },
+      { label: 'Blog', href: '#blog' },
+      { label: 'Careers', href: '#careers' },
+      { label: 'Contact', href: '#contact' },
     ],
     resources: [
-      { label: "Documentation", href: "#docs" },
-      { label: "Guides", href: "#guides" },
-      { label: "Support", href: "#support" },
-      { label: "Status", href: "#status" },
+      { label: 'Documentation', href: '#docs' },
+      { label: 'Guides', href: '#guides' },
+      { label: 'Support', href: '#support' },
+      { label: 'Status', href: '#status' },
     ],
     legal: [
-      { label: "Privacy", href: "#privacy" },
-      { label: "Terms", href: "#terms" },
-      { label: "Security", href: "#security" },
-      { label: "Cookies", href: "#cookies" },
+      { label: 'Privacy', href: '#privacy' },
+      { label: 'Terms', href: '#terms' },
+      { label: 'Security', href: '#security' },
+      { label: 'Cookies', href: '#cookies' },
     ],
   };
 
@@ -48,7 +49,7 @@ export function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-semibold">Product</h3>
             <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
+              {footerLinks.product.map(link => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
@@ -64,7 +65,7 @@ export function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-semibold">Company</h3>
             <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
+              {footerLinks.company.map(link => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
@@ -80,7 +81,7 @@ export function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-semibold">Resources</h3>
             <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
+              {footerLinks.resources.map(link => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
@@ -96,7 +97,7 @@ export function Footer() {
           <div>
             <h3 className="mb-4 text-sm font-semibold">Legal</h3>
             <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
+              {footerLinks.legal.map(link => (
                 <li key={link.label}>
                   <Link
                     to={link.href}

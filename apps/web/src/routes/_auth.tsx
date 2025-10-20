@@ -1,15 +1,16 @@
-import { ArrowLeftIcon, TrophyIcon } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet } from 'react-router';
 
-import type { Route } from "./+types/_auth";
+import { ArrowLeftIcon, TrophyIcon } from 'lucide-react';
+
+import type { Route } from './+types/_auth';
 
 export default function AuthLayout({ matches }: Route.ComponentProps) {
-  const isSignIn = matches?.at(-1)?.pathname === "/sign-in";
-  const isSignUp = matches?.at(-1)?.pathname === "/sign-up";
+  const isSignIn = matches?.at(-1)?.pathname === '/sign-in';
+  const isSignUp = matches?.at(-1)?.pathname === '/sign-up';
 
-  let imageSrc = "";
-  if (isSignIn) imageSrc = "/sign-in.png";
-  if (isSignUp) imageSrc = "/sign-up.jpg";
+  let imageSrc = '';
+  if (isSignIn) imageSrc = '/sign-in.png';
+  if (isSignUp) imageSrc = '/sign-up.jpg';
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">

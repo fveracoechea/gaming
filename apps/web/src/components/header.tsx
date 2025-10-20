@@ -1,6 +1,9 @@
-import { Button } from "@gaming/ui/components/button";
-import { TrophyIcon } from "lucide-react";
-import { href, Link } from "react-router";
+import { Link, href } from 'react-router';
+
+import { Button } from '@gaming/ui/components/button';
+import { TrophyIcon } from 'lucide-react';
+
+import { AppLogo } from './app-logo';
 
 export function Header() {
   return (
@@ -8,9 +11,7 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <TrophyIcon className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <AppLogo />
             <span className="text-xl font-bold">BattleStage</span>
           </Link>
 
@@ -42,15 +43,8 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden sm:inline-flex"
-              asChild
-            >
-              <Link to={href("/sign-in")}>
-                Sign In
-              </Link>
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
+              <Link to={href('/sign-in')}>Sign In</Link>
             </Button>
             <Button size="sm">Get Started</Button>
           </div>
