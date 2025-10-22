@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, NavLink, useLocation } from 'react-router';
 
 import { ScrollArea } from '@gaming/ui/components/scroll-area';
 import {
@@ -27,7 +28,6 @@ const data = {
         {
           title: 'Overview',
           url: '/dashboard',
-          isActive: true,
         },
         {
           title: 'My Profile',
@@ -79,11 +79,11 @@ const data = {
         },
         {
           title: 'My Team',
-          url: '/teams/my-team',
+          url: '/dashboard/my-team',
         },
         {
           title: 'Create Team',
-          url: '/teams/create',
+          url: '/dashboard/create-team',
         },
         {
           title: 'Player Directory',
@@ -184,9 +184,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map(item => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
+                    <NavLink to={item.url} end>
+                      {({ isActive }) => (
+                        <SidebarMenuButton asChild isActive={isActive}>
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      )}
+                    </NavLink>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>

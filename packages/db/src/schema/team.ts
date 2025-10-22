@@ -18,9 +18,8 @@ import { tournament } from './tournament';
 export const team = t.pgTable('team', {
   id,
   name: t.varchar().notNull(),
-  slug: t.varchar().notNull().unique(),
-  description: t.varchar({ length: 1024 }),
-  logoUrl: t.varchar({ length: 2048 }),
+  description: t.text(),
+  logoUrl: t.text(),
   ...timestamps,
 });
 

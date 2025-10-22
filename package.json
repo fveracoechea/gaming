@@ -43,7 +43,7 @@
     "db:watch": "turbo -F @gaming/db db:watch",
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:down": "turbo -F @gaming/db db:down",
-    "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/main.ts",
+    "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/_index.ts",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write"
