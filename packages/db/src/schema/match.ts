@@ -1,7 +1,7 @@
-import type { MatchStatus } from '@gaming/zod/tournaments';
+import type { MatchStatus } from '@gaming/zod/match';
 import * as t from 'drizzle-orm/pg-core';
 
-import { id, timestamps } from './common';
+import { id, timestamps } from '../common';
 import { tournament, tournamentParticipant } from './tournament';
 
 /**
@@ -12,14 +12,14 @@ import { tournament, tournamentParticipant } from './tournament';
 export const match = t.pgTable('match', {
   id,
   tournamentId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournament.id, { onDelete: 'cascade' }),
   round: t.integer(),
   sequence: t.integer(),
   status: t.varchar().$type<MatchStatus>().notNull().default('PENDING'),
   winnerParticipantId: t
-    .text()
+    .uuid()
     .references(() => tournamentParticipant.id, { onDelete: 'set null' }),
   dotaMatchId: t.varchar({ length: 50 }),
   openDotaMatchId: t.varchar({ length: 50 }),
@@ -38,11 +38,11 @@ export const match = t.pgTable('match', {
 export const matchParticipant = t.pgTable('match_participant', {
   id,
   matchId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => match.id, { onDelete: 'cascade' }),
   participantId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournamentParticipant.id, { onDelete: 'cascade' }),
   seed: t.integer(),

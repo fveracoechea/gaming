@@ -1,8 +1,8 @@
 import type { PayoutStatus } from '@gaming/zod';
 import * as t from 'drizzle-orm/pg-core';
 
+import { id, timestamps } from '../common';
 import { user } from './auth';
-import { id, timestamps } from './common';
 import { tournament, tournamentParticipant } from './tournament';
 
 /**
@@ -12,10 +12,10 @@ import { tournament, tournamentParticipant } from './tournament';
 export const payout = t.pgTable('payout', {
   id,
   tournamentId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournament.id, { onDelete: 'cascade' }),
-  participantId: t.text().references(() => tournamentParticipant.id, {
+  participantId: t.uuid().references(() => tournamentParticipant.id, {
     onDelete: 'set null',
   }),
   organizerId: t.text().references(() => user.id, { onDelete: 'set null' }),

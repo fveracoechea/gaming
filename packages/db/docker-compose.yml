@@ -7,13 +7,13 @@ services:
     environment:
       POSTGRES_DB: gaming
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: mypassword
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
-      - gaming_postgres_data:/var/lib/postgresql/data
+      - gaming_postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,3 +21,4 @@ services:
 
 volumes:
   gaming_postgres_data:
+

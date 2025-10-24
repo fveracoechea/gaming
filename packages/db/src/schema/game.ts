@@ -1,6 +1,6 @@
 import * as t from 'drizzle-orm/pg-core';
 
-import { id, timestamps } from './common';
+import { id, timestamps } from '../common';
 
 /**
  * Games supported by the platform (e.g. Dota2, others in future)

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Link, NavLink, useLocation } from 'react-router';
+import { NavLink } from 'react-router';
 
-import { ScrollArea } from '@gaming/ui/components/scroll-area';
 import {
   Sidebar,
   SidebarContent,

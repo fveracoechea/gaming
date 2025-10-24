@@ -35,7 +35,7 @@
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
     "dev:server": "turbo -F server dev",
-    "db:push": "turbo -F @gaming/db db:push",
+    "db:push": "bun run --filter './packages/db' db:push",
     "db:studio": "turbo -F @gaming/db db:studio",
     "db:generate": "turbo -F @gaming/db db:generate",
     "db:migrate": "turbo -F @gaming/db db:migrate",
@@ -43,7 +43,7 @@
     "db:watch": "turbo -F @gaming/db db:watch",
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:down": "turbo -F @gaming/db db:down",
-    "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/_index.ts",
+    "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/server.ts",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write"

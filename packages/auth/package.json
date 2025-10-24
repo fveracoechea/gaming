@@ -1,16 +1,16 @@
 {
   "name": "@gaming/auth",
+  "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/_index.d.ts",
-      "default": "./src/_index.ts"
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./src/server.ts"
     }
   },
-  "type": "module",
   "scripts": {
     "build": "tsdown"
   },
@@ -24,6 +24,7 @@
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:",
-    "@gaming/db": "workspace:*"
+    "@gaming/db": "workspace:*",
+    "@gaming/zod": "workspace:*"
   }
 }

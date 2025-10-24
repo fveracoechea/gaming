@@ -6,8 +6,8 @@ import type {
 } from '@gaming/zod/tournaments';
 import * as t from 'drizzle-orm/pg-core';
 
+import { id, timestamps } from '../common';
 import { user } from './auth';
-import { id, timestamps } from './common';
 import { game } from './game';
 
 export const tournament = t.pgTable('tournament', {
@@ -17,7 +17,7 @@ export const tournament = t.pgTable('tournament', {
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
   gameId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => game.id, { onDelete: 'restrict' }),
   title: t.varchar().notNull(),
@@ -40,7 +40,7 @@ export const tournament = t.pgTable('tournament', {
 export const tournamentInvite = t.pgTable('tournament_invite', {
   id,
   tournamentId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournament.id, { onDelete: 'cascade' }),
   userId: t
@@ -53,7 +53,7 @@ export const tournamentInvite = t.pgTable('tournament_invite', {
 export const tournamentParticipant = t.pgTable('tournament_participant', {
   id,
   tournamentId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournament.id, { onDelete: 'cascade' }),
   userId: t

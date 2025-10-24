@@ -1,14 +1,15 @@
+import { env } from '@gaming/zod';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
-import * as schema from './schema/_index';
+import * as schema from './db-schema';
 
-export * as schema from './schema/_index';
+export * as schema from './db-schema';
 
 export const db = drizzle({
   schema,
   casing: 'snake_case',
   connection: {
-    connectionString: process.env.DATABASE_URL,
-    // ssl: true,
+    ssl: env.DATABSE_SSL,
+    connectionString: env.DATABASE_URL,
   },
 });

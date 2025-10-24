@@ -1,9 +1,9 @@
 import type { TeamMemberRole, TeamTournamentParticipantStatus } from '@gaming/zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import * as t from 'drizzle-orm/pg-core';
 
+import { id, timestamps } from '../common';
 import { user } from './auth';
-import { id, timestamps } from './common';
 import { match } from './match';
 import { tournament } from './tournament';
 
@@ -32,7 +32,7 @@ export const teamMember = t.pgTable(
   {
     id,
     teamId: t
-      .text()
+      .uuid()
       .notNull()
       .references(() => team.id, { onDelete: 'cascade' }),
     userId: t
@@ -46,7 +46,11 @@ export const teamMember = t.pgTable(
     t
       .uniqueIndex('team_one_captain_per_team_idx')
       .on(table.teamId)
-      .where(eq(table.role, 'CAPTAIN')),
+      .where(eq(table.role, sql`'CAPTAIN'`)),
+    t
+      .uniqueIndex('team_one_coach_per_team_idx')
+      .on(table.teamId)
+      .where(eq(table.role, sql`'COACH'`)),
   ],
 );
 
@@ -57,11 +61,11 @@ export const teamMember = t.pgTable(
 export const tournamentTeamParticipant = t.pgTable('tournament_team_participant', {
   id,
   tournamentId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournament.id, { onDelete: 'cascade' }),
   teamId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => team.id, { onDelete: 'cascade' }),
   status: t.varchar().$type<TeamTournamentParticipantStatus>().notNull().default('REGISTERED'),
@@ -77,11 +81,11 @@ export const tournamentTeamParticipant = t.pgTable('tournament_team_participant'
 export const matchTeamParticipant = t.pgTable('match_team_participant', {
   id,
   matchId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => match.id, { onDelete: 'cascade' }),
   teamParticipantId: t
-    .text()
+    .uuid()
     .notNull()
     .references(() => tournamentTeamParticipant.id, { onDelete: 'cascade' }),
   seed: t.integer(),

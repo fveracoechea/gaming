@@ -11,7 +11,7 @@ import {
 import { Separator } from '@gaming/ui/components/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@gaming/ui/components/sidebar';
 
-import { AppSidebar } from './app-sidebar';
+import { AppSidebar } from '../components/app-sidebar';
 
 export default function DashboarLayout() {
   return (

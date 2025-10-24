@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@gaming/ui/components/sidebar';
-import { Check, ChevronsUpDown, GalleryVerticalEnd } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { AppLogo } from '@/components/app-logo';
 
