@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 // Entry payment status values
 export const PaymentStatusEnum = z.enum([
   'PENDING', // intent created, awaiting confirmation

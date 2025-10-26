@@ -4,7 +4,7 @@ import { logger } from 'hono/logger';
 
 import { createContext } from '@gaming/api/context';
 import { appRouter } from '@gaming/api/routers';
-import { auth } from '@gaming/auth';
+import { auth } from '@gaming/auth/server';
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { onError } from '@orpc/server';

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 // Payout status for distributing winnings
 export const PayoutStatusEnum = z.enum([
   'PENDING', // scheduled to be processed

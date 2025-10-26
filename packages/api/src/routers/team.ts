@@ -1,10 +1,11 @@
-import { procedures as p } from '@/procedure';
 import { db } from '@gaming/db';
 import { schema } from '@gaming/db';
 import { eq } from 'drizzle-orm';
 import z from 'zod';
 
-export const todoRouter = {
+import { procedures as p } from '../procedure';
+
+export const teamRouter = {
   findTeam: p.protected.input(z.uuid()).handler(async ({ input }) => {
     return db.query.team.findFirst({
       where: eq(schema.team.id, input),

@@ -1,45 +1,77 @@
-import { Link, href } from 'react-router';
+import { Form, Link, href, redirect } from 'react-router';
 
+import { authClient } from '@gaming/auth/client';
 import { Button } from '@gaming/ui/components/button';
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
 } from '@gaming/ui/components/field';
 import { Input } from '@gaming/ui/components/input';
 import { cn } from '@gaming/ui/lib/utils';
+import { SignUpFormSchema } from '@gaming/zod';
+import { z } from 'zod';
 
-export default function SignupForm({}) {
+import type { Route } from './+types/_auth.sign-up';
+
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const { data: formData, error: formError } = SignUpFormSchema.safeParse(
+    Object.fromEntries(await request.formData()),
+  );
+
+  if (formError) return z.flattenError(formError);
+
+  const { error } = await authClient.signUp.email({
+    name: formData.name,
+    email: formData.email,
+    password: formData.password,
+  });
+
+  if (error) return { formErrors: [error.message], fieldErrors: null };
+
+  return redirect(href('/dashboard'));
+}
+
+export default function SignupForm({ actionData }: Route.ComponentProps) {
+  const { formErrors, fieldErrors } = actionData || {};
   return (
-    <form className={cn('flex flex-col gap-6')}>
+    <Form method="POST" className={cn('flex flex-col gap-6')} noValidate>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Sign Up</h1>
           <p className="text-muted-foreground text-sm text-balance">
             Fill in the form below to create your account
           </p>
+          {formErrors && formErrors?.map(e => <p key={e}>{e}</p>)}
         </div>
         <Field>
           <FieldLabel htmlFor="name">Full Name</FieldLabel>
-          <Input id="name" type="text" placeholder="John Doe" required />
+          <Input id="name" type="text" placeholder="John Doe" required name="name" />
+          {fieldErrors?.name && <FieldError>{fieldErrors.name}</FieldError>}
         </Field>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input id="email" type="email" placeholder="m@example.com" name="email" required />
+          {fieldErrors?.email && <FieldError>{fieldErrors.email}</FieldError>}
           <FieldDescription>
             We&apos;ll use this to contact you. We will not share your email with anyone else.
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" required name="password" />
+          {fieldErrors?.password && <FieldError>{fieldErrors.password}</FieldError>}
           <FieldDescription>Must be at least 8 characters long.</FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input id="confirm-password" type="password" required />
+          <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+          <Input id="confirmPassword" name="confirmPassword" type="password" required />
+          {fieldErrors?.confirmPassword && (
+            <FieldError>{fieldErrors.confirmPassword}</FieldError>
+          )}
           <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
         <Field>
@@ -61,6 +93,6 @@ export default function SignupForm({}) {
           </FieldDescription>
         </Field>
       </FieldGroup>
-    </form>
+    </Form>
   );
 }

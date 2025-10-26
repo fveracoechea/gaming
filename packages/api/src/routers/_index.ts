@@ -1,7 +1,7 @@
-import { procedures } from '@/procedure';
 import type { RouterClient } from '@orpc/server';
 
-import { todoRouter } from './todo';
+import { procedures } from '../procedure';
+import { teamRouter } from './team';
 
 export const appRouter = {
   healthCheck: procedures.public.handler(() => {
@@ -13,6 +13,7 @@ export const appRouter = {
       user: context.session?.user,
     };
   }),
+  team: teamRouter,
 };
 
 export type AppRouter = typeof appRouter;

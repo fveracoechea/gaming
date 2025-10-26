@@ -41,6 +41,7 @@
         "@gaming/api": "workspace:*",
         "@gaming/auth": "workspace:*",
         "@gaming/ui": "workspace:*",
+        "@gaming/zod": "workspace:*",
         "@orpc/client": "catalog:",
         "@orpc/server": "catalog:",
         "@orpc/tanstack-query": "^1.9.0",

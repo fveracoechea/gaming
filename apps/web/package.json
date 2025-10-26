@@ -33,7 +33,8 @@
     "better-auth": "catalog:",
     "@gaming/api": "workspace:*",
     "@gaming/auth": "workspace:*",
-    "@gaming/ui": "workspace:*"
+    "@gaming/ui": "workspace:*",
+    "@gaming/zod": "workspace:*"
   },
   "devDependencies": {
     "@react-router/dev": "^7.9.4",
