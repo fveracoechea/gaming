@@ -13,3 +13,10 @@ export const SignUpFormSchema = z
   });
 
 export type SignUpFormFields = z.infer<typeof SignUpFormSchema>;
+
+export const SignInFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+});
+
+export type SignInFormFields = z.infer<typeof SignInFormSchema>;

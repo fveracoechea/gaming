@@ -45,7 +45,12 @@ export default function SignupForm({ actionData }: Route.ComponentProps) {
           <p className="text-muted-foreground text-sm text-balance">
             Fill in the form below to create your account
           </p>
-          {formErrors && formErrors?.map(e => <p key={e}>{e}</p>)}
+          {formErrors &&
+            formErrors?.map(e => (
+              <p key={e} className="text-sm text-destructive">
+                {e}
+              </p>
+            ))}
         </div>
         <Field>
           <FieldLabel htmlFor="name">Full Name</FieldLabel>
