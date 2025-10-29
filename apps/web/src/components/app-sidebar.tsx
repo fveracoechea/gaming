@@ -30,7 +30,7 @@ const data = {
         },
         {
           title: 'My Profile',
-          url: '/dashboard/profile',
+          url: '/dashboard/my-profile',
         },
         {
           title: 'My Stats',
