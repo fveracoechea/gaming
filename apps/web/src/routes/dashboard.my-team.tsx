@@ -12,6 +12,14 @@ import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
 import { cn } from '@gaming/ui/lib/utils';
 
+// Membership / plan context (UI only)
+// Pro plan is NOT launched yet – display as "Coming Soon".
+const mockMembershipContext = {
+  teamCount: 1, // how many teams the user currently belongs to
+  maxTeamsFree: 1,
+  proMaxTeamsComingSoon: 3,
+};
+
 // Mock data – UI only
 const mockTeam = {
   name: 'Radiant Vanguard',
@@ -84,6 +92,11 @@ function statusVariant(status: string): 'default' | 'outline' | 'destructive' | 
 }
 
 export default function MyTeamPage() {
+  const { teamCount, maxTeamsFree, proMaxTeamsComingSoon } = mockMembershipContext;
+  const maxAllowed = maxTeamsFree; // only free plan active now
+  const canJoinOrCreateAnother = teamCount < maxAllowed;
+  const remainingSlots = maxAllowed - teamCount;
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
@@ -93,6 +106,40 @@ export default function MyTeamPage() {
           Overview of your squad, members, and tournament activity.
         </p>
       </div>
+
+      {/* Membership Limit / Coming Soon Banner */}
+      <Card className={cn('border-dashed bg-muted/30')}>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            Team Membership
+            <Badge variant="outline">FREE PLAN</Badge>
+            <Badge variant="secondary">PRO COMING SOON</Badge>
+          </CardTitle>
+          <CardDescription className="text-xs">
+            You can belong to <strong>{maxTeamsFree}</strong> team on the free plan. Pro plan
+            (coming soon) will allow up to <strong>{proMaxTeamsComingSoon}</strong> teams.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-3 pt-0">
+          <div className="text-sm font-medium">
+            {teamCount} / {maxAllowed} teams used
+          </div>
+          <Button size="sm" variant="outline" disabled>
+            Pro Plan Coming Soon
+          </Button>
+          {canJoinOrCreateAnother ? (
+            <div className="text-xs text-muted-foreground">
+              You can still {teamCount === 0 ? 'join or create' : 'add'} {remainingSlots} more
+              team
+              {remainingSlots === 1 ? '' : 's'}.
+            </div>
+          ) : (
+            <div className="text-xs text-muted-foreground">
+              Limit reached. Leave a team to join another. Pro soon.
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Team Overview */}
       <Card>
@@ -111,7 +158,9 @@ export default function MyTeamPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline">Invite Member</Button>
+            <Button variant="outline" disabled={!canJoinOrCreateAnother}>
+              Invite Member
+            </Button>
             <Button>Create Tournament</Button>
           </div>
         </CardHeader>
@@ -215,9 +264,32 @@ export default function MyTeamPage() {
               <FieldDescription>Enter one at a time – UI only.</FieldDescription>
             </Field>
             <Field>
-              <Button type="button">Send Invite</Button>
+              <Button type="button" disabled={!canJoinOrCreateAnother}>
+                Send Invite
+              </Button>
             </Field>
           </FieldGroup>
+        </CardContent>
+      </Card>
+
+      {/* Coming Soon Upsell */}
+      <Card className="border-dashed">
+        <CardHeader>
+          <CardTitle>Multiple Teams – Coming Soon</CardTitle>
+          <CardDescription>
+            Soon you will be able to belong to up to {proMaxTeamsComingSoon} teams with the Pro
+            plan.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-4">
+          <ul className="text-xs text-muted-foreground list-disc pl-4 space-y-1">
+            <li>Separate rosters for scrims and competition</li>
+            <li>Participate in parallel tournaments</li>
+            <li>Role specialization & scheduling flexibility</li>
+          </ul>
+          <Button size="sm" disabled>
+            Pro Plan Coming Soon
+          </Button>
         </CardContent>
       </Card>
     </div>
