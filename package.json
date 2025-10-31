@@ -43,12 +43,14 @@
     "db:watch": "turbo -F @gaming/db db:watch",
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:down": "turbo -F @gaming/db db:down",
+    "db:seed": "bun run --filter './packages/db' db:seed",
     "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/server.ts",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.2.0",
     "dotenv": "^17.2.2",
     "zod": "^4.1.11"
   },
