@@ -14,6 +14,7 @@ import {
   oprcServerMiddleware,
   secureHeadersMiddleware,
 } from '@/lib/middlewares.server';
+import { Toaster } from '@gaming/ui/components/sonner';
 
 import type { Route } from './+types/root';
 import stylesheet from './main.css?url';
@@ -55,6 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>

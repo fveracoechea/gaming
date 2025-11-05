@@ -11,8 +11,10 @@ import {
   CardTitle,
 } from '@gaming/ui/components/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@gaming/ui/components/field';
+import { FieldError } from '@gaming/ui/components/field';
 import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
+import { toast } from '@gaming/ui/components/sonner';
 import { Spinner } from '@gaming/ui/components/spinner';
 import { safe } from '@orpc/server';
 import { parseFormData } from '@remix-run/form-data-parser';
@@ -21,9 +23,29 @@ import z from 'zod';
 import type { Route } from './+types/dashboard.create-team';
 
 const CreateTeamFormSchema = z.object({
-  name: z.string().min(3).max(30),
-  logoUrl: z.url().optional(),
-  description: z.string().max(500).optional(),
+  name: z
+    .string({ error: 'Team name is required' })
+    .trim()
+    .min(3, 'Team name must be at least 3 characters')
+    .max(30, 'Team name must be at most 30 characters')
+    .regex(/^[A-Za-z0-9 _'\-]+$/, 'Team name contains invalid characters'),
+  logoUrl: z.preprocess(
+    v => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+    z
+      .url('Logo URL must be a valid URL (include https://)')
+      .trim()
+      .max(300, 'Logo URL must be 300 characters or less')
+      .optional(),
+  ),
+  description: z.preprocess(
+    v => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+    z
+      .string()
+      .trim()
+      .min(10, 'Description must be at least 10 characters')
+      .max(500, 'Description must be 500 characters or less')
+      .optional(),
+  ),
 });
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -41,6 +63,13 @@ export async function action({ context, request }: Route.ActionArgs) {
 
   const { error } = await validation.safeParseAsync(Object.fromEntries(formData));
   if (error) return z.flattenError(error);
+  return null;
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  const errors = await serverAction();
+  if (errors) return errors;
+  toast.success('Team created successfully!');
   return redirect(href('/dashboard/my-team'));
 }
 
@@ -57,35 +86,55 @@ export default function CreateTeamPage({ actionData }: Route.ComponentProps) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main form */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Team Details</CardTitle>
             <CardDescription>Public information shown on tournaments.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Form method="post">
+            <Form method="post" noValidate>
+              {formErrors?.length ? (
+                <FieldError
+                  errors={formErrors.map(message => ({ message }))}
+                  className="mb-4"
+                />
+              ) : null}
               <FieldGroup>
-                <Field>
+                <Field data-invalid={!!fieldErrors?.name?.length}>
                   <FieldLabel htmlFor="team-name">Team Name</FieldLabel>
-                  <Input id="team-name" placeholder="e.g. Radiant Vanguard" />
-                  <FieldDescription>Unique name identifying your team.</FieldDescription>
+                  <Input
+                    id="team-name"
+                    name="name"
+                    placeholder="Unique name identifying your team."
+                    required
+                    aria-invalid={!!fieldErrors?.name?.length}
+                  />
+                  <FieldError errors={fieldErrors?.name?.map(message => ({ message }))} />
                 </Field>
 
-                <Field>
+                <Field data-invalid={!!fieldErrors?.logoUrl?.length}>
                   <FieldLabel htmlFor="team-logo">Logo URL</FieldLabel>
-                  <Input id="team-logo" placeholder="https://..." />
-                  <FieldDescription>External image link (64x64 recommended).</FieldDescription>
+                  <Input
+                    id="team-logo"
+                    name="logoUrl"
+                    placeholder="External image link (64x64 recommended)."
+                    aria-invalid={!!fieldErrors?.logoUrl?.length}
+                  />
+                  <FieldError errors={fieldErrors?.logoUrl?.map(message => ({ message }))} />
                 </Field>
 
-                <Field>
+                <Field data-invalid={!!fieldErrors?.description?.length}>
                   <FieldLabel htmlFor="team-desc">Description / Bio</FieldLabel>
                   <textarea
                     id="team-desc"
-                    placeholder="Competitive Dota 2 team specializing in macro strategy and disciplined drafts."
+                    name="description"
+                    placeholder="Tell others what your squad excels at."
                     className="min-h-32 w-full rounded-md border bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    aria-invalid={!!fieldErrors?.description?.length}
                   />
-                  <FieldDescription>Tell others what your squad excels at.</FieldDescription>
+                  <FieldError
+                    errors={fieldErrors?.description?.map(message => ({ message }))}
+                  />
                 </Field>
 
                 <Field>
@@ -137,7 +186,7 @@ export default function CreateTeamPage({ actionData }: Route.ComponentProps) {
                 </Field>
 
                 <Field>
-                  <Button type="button">
+                  <Button type="submit" disabled={navigation.state === 'submitting'}>
                     {navigation.state === 'submitting' ? (
                       <Spinner />
                     ) : (
