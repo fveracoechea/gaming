@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
 import {
@@ -13,9 +11,13 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from '@gaming/ui/comp
 import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
 
-export default function CreateTeamPage() {
-  const [step, setStep] = useState(1);
+import type { Route } from './+types/dashboard.create-team';
 
+export async function action({}: Route.ActionArgs) {
+  return null;
+}
+
+export default function CreateTeamPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="space-y-2">
@@ -33,7 +35,7 @@ export default function CreateTeamPage() {
             <CardDescription>Public information shown on tournaments.</CardDescription>
           </CardHeader>
           <CardContent>
-            <FieldGroup className="space-y-6">
+            <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="team-name">Team Name</FieldLabel>
                 <Input id="team-name" placeholder="e.g. Radiant Vanguard" />
@@ -59,14 +61,7 @@ export default function CreateTeamPage() {
               <Field>
                 <FieldLabel>Primary Game</FieldLabel>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-                  {[
-                    'Dota 2',
-                    'CS2',
-                    'Valorant',
-                    'Rocket League',
-                    'League of Legends',
-                    'Overwatch 2',
-                  ].map(game => (
+                  {['Dota 2', 'CS2', 'Rocket League', 'League of Legends'].map(game => (
                     <button
                       key={game}
                       type="button"
@@ -119,11 +114,12 @@ export default function CreateTeamPage() {
         </Card>
 
         {/* Sidebar guidance */}
-        <Card>
+        <Card className="h-min">
           <CardHeader>
             <CardTitle>Tips</CardTitle>
             <CardDescription>Recommendations for effective setup</CardDescription>
           </CardHeader>
+          <Separator />
           <CardContent className="space-y-4 text-sm">
             <div className="space-y-1">
               <p className="font-medium">Clear Identity</p>
@@ -131,28 +127,24 @@ export default function CreateTeamPage() {
                 Short memorable name & simple logo improve recognition.
               </p>
             </div>
-            <Separator />
             <div className="space-y-1">
               <p className="font-medium">Bio Focus</p>
               <p className="text-muted-foreground">
                 Highlight strengths (drafting, laning, macro, coaching) and timezone.
               </p>
             </div>
-            <Separator />
             <div className="space-y-1">
               <p className="font-medium">Recruitment Clarity</p>
               <p className="text-muted-foreground">
                 Status helps players know if they should reach out.
               </p>
             </div>
-            <Separator />
             <div className="space-y-1">
               <p className="font-medium">Format Preferences</p>
               <p className="text-muted-foreground">
                 Lets organizers match teams with bracket styles they enjoy.
               </p>
             </div>
-            <Separator />
             <div className="space-y-1">
               <p className="font-medium">Future Integrations</p>
               <p className="text-muted-foreground">
@@ -162,29 +154,6 @@ export default function CreateTeamPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Placeholder for roster pre-setup (optional) */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Initial Roster (Optional)</CardTitle>
-          <CardDescription>Add player handles before inviting formally.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup className="max-w-2xl space-y-4">
-            {[1, 2, 3, 4, 5].map(slot => (
-              <Field key={slot} className="flex flex-col gap-2">
-                <FieldLabel htmlFor={`player-${slot}`}>Player {slot}</FieldLabel>
-                <Input id={`player-${slot}`} placeholder="Handle / Email" />
-              </Field>
-            ))}
-            <Field>
-              <Button type="button" variant="outline">
-                Save Draft Roster
-              </Button>
-            </Field>
-          </FieldGroup>
-        </CardContent>
-      </Card>
     </div>
   );
 }
