@@ -10,7 +10,7 @@ export const env = createEnv({
   },
 
   client: {
-    VITE_BACKEND_URL: z.url().default('http://localhost:3000'),
+    VITE_AUTH_URL: z.url().default('http://localhost:5173'),
   },
 
   /**

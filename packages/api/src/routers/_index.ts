@@ -1,13 +1,12 @@
 import type { RouterClient } from '@orpc/server';
 
-import { procedures } from '../procedure';
-import { teamRouter } from './team';
+import { procedures as p } from '../procedure';
+import * as team from './team';
 
 export const appRouter = {
-  healthCheck: procedures.public.handler(() => {
-    return 'OK';
-  }),
-  team: teamRouter,
+  team,
+  healthCheck: p.public.handler(() => 'OK'),
+  whoami: p.protected.handler(({ context }) => context.auth),
 };
 
 export type AppRouter = typeof appRouter;

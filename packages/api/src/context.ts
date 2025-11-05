@@ -1,19 +1,12 @@
-import type { Context as HonoContext } from 'hono';
-
 import { auth } from '@gaming/auth/server';
 
 export type CreateContextOptions = {
-  context: HonoContext;
+  request: Request;
 };
 
-export async function createContext({ context }: CreateContextOptions) {
-  const session = await auth.api.getSession({
-    headers: context.req.raw.headers,
-  });
-
-  return {
-    session,
-  };
+export async function createORPCContext({ request }: CreateContextOptions) {
+  const session = await auth.api.getSession({ headers: request.headers });
+  return { auth: session };
 }
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export type Context = Awaited<ReturnType<typeof createORPCContext>>;

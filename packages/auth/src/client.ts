@@ -4,5 +4,5 @@ import { createAuthClient } from 'better-auth/react';
 
 export const authClient = createAuthClient({
   plugins: [usernameClient(), adminClient()],
-  baseURL: env.VITE_BACKEND_URL,
+  baseURL: env.VITE_AUTH_URL,
 });

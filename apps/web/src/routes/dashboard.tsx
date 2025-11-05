@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router';
 
+import { requireAuthMiddleware } from '@/lib/middlewares.server';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,6 +13,9 @@ import { Separator } from '@gaming/ui/components/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@gaming/ui/components/sidebar';
 
 import { AppSidebar } from '../components/app-sidebar';
+import type { Route } from './+types/dashboard';
+
+export const middleware: Route.MiddlewareFunction[] = [requireAuthMiddleware];
 
 export default function DashboarLayout() {
   return (

@@ -7,6 +7,14 @@ import {
   isRouteErrorResponse,
 } from 'react-router';
 
+import {
+  batcherMiddleware,
+  contextStorageMiddleware,
+  loggerMiddleware,
+  oprcServerMiddleware,
+  secureHeadersMiddleware,
+} from '@/lib/middlewares.server';
+
 import type { Route } from './+types/root';
 import stylesheet from './main.css?url';
 
@@ -25,6 +33,14 @@ export const links: Route.LinksFunction = () => [
     rel: 'stylesheet',
     href: stylesheet,
   },
+];
+
+export const middleware = [
+  contextStorageMiddleware,
+  batcherMiddleware,
+  secureHeadersMiddleware,
+  loggerMiddleware,
+  oprcServerMiddleware,
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {

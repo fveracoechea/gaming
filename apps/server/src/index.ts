@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
-import { createContext } from '@gaming/api/context';
+import { createORPCContext } from '@gaming/api/context';
 import { appRouter } from '@gaming/api/routers';
 import { auth } from '@gaming/auth/server';
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
@@ -49,7 +49,7 @@ export const rpcHandler = new RPCHandler(appRouter, {
 });
 
 app.use('/*', async (c, next) => {
-  const context = await createContext({ context: c });
+  const context = await createORPCContext({ request: c.req.raw });
 
   const rpcResult = await rpcHandler.handle(c.req.raw, {
     prefix: '/rpc',
