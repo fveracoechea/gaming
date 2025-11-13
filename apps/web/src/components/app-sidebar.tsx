@@ -78,7 +78,7 @@ const data = {
         },
         {
           title: 'My Team',
-          url: '/dashboard/my-team',
+          url: '/dashboard/my-teams',
         },
         {
           title: 'Create Team',

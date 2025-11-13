@@ -1,5 +1,6 @@
 import { db } from '@gaming/db';
 import { schema } from '@gaming/db';
+import { CreateTeamSchema } from '@gaming/zod';
 import { ORPCError } from '@orpc/client';
 import { eq } from 'drizzle-orm';
 import z from 'zod';
@@ -20,24 +21,22 @@ export const findById = p.protected.input(z.uuid()).handler(async ({ input }) =>
 
 export const findMyTeams = p.protected.handler(async ({ context }) => {
   const { user } = context.auth;
-  return db.query.teamMember.findMany({
+  const data = await db.query.teamMember.findMany({
     where: eq(schema.teamMember.userId, user.id),
+    with: {
+      team: { with: { members: { with: { user: true } } } },
+    },
   });
+  return data.map(tm => tm.team);
 });
 
 /**
  * Create a new team and add the current user as a captain.
  * */
 export const create = p.protected
-  .input(
-    z.object({
-      name: z.string().min(1),
-      description: z.string().max(255).optional().nullable(),
-    }),
-  )
+  .input(CreateTeamSchema)
   .handler(async ({ input, context }) => {
     const { user } = context.auth;
-    const { name, description } = input;
 
     const teamCount = await db.$count(
       schema.teamMember,
@@ -50,14 +49,7 @@ export const create = p.protected
       });
 
     return db.transaction(async tx => {
-      const [team] = await tx
-        .insert(schema.team)
-        .values({
-          name,
-          description,
-        })
-        .returning();
-
+      const [team] = await tx.insert(schema.team).values(input).returning();
       if (!team) throw new ORPCError('INTERNAL', { message: 'Failed to create team' });
 
       await tx.insert(schema.teamMember).values({

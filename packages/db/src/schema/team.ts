@@ -1,5 +1,5 @@
 import type { TeamMemberRole, TeamTournamentParticipantStatus } from '@gaming/zod';
-import { eq, sql } from 'drizzle-orm';
+import { eq, relations, sql } from 'drizzle-orm';
 import * as t from 'drizzle-orm/pg-core';
 
 import { id, timestamps } from '../common';
@@ -22,6 +22,10 @@ export const team = t.pgTable('team', {
   logoUrl: t.text(),
   ...timestamps,
 });
+
+export const teamRelations = relations(team, ({ many }) => ({
+  members: many(teamMember),
+}));
 
 /**
  * Many-to-many link between teams and users.
@@ -53,6 +57,17 @@ export const teamMember = t.pgTable(
       .where(eq(table.role, sql`'COACH'`)),
   ],
 );
+
+export const teamMemberRelations = relations(teamMember, ({ one }) => ({
+  team: one(team, {
+    fields: [teamMember.teamId],
+    references: [team.id],
+  }),
+  user: one(user, {
+    fields: [teamMember.userId],
+    references: [user.id],
+  }),
+}));
 
 /**
  * Teams registered in a tournament (parallel to tournament_participant for users)

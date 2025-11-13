@@ -16,43 +16,18 @@ import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
 import { toast } from '@gaming/ui/components/sonner';
 import { Spinner } from '@gaming/ui/components/spinner';
+import { CreateTeamSchema } from '@gaming/zod';
 import { safe } from '@orpc/server';
 import { parseFormData } from '@remix-run/form-data-parser';
 import z from 'zod';
 
 import type { Route } from './+types/dashboard.create-team';
 
-const CreateTeamFormSchema = z.object({
-  name: z
-    .string({ error: 'Team name is required' })
-    .trim()
-    .min(3, 'Team name must be at least 3 characters')
-    .max(30, 'Team name must be at most 30 characters')
-    .regex(/^[A-Za-z0-9 _'\-]+$/, 'Team name contains invalid characters'),
-  logoUrl: z.preprocess(
-    v => (typeof v === 'string' && v.trim() === '' ? undefined : v),
-    z
-      .url('Logo URL must be a valid URL (include https://)')
-      .trim()
-      .max(300, 'Logo URL must be 300 characters or less')
-      .optional(),
-  ),
-  description: z.preprocess(
-    v => (typeof v === 'string' && v.trim() === '' ? undefined : v),
-    z
-      .string()
-      .trim()
-      .min(10, 'Description must be at least 10 characters')
-      .max(500, 'Description must be 500 characters or less')
-      .optional(),
-  ),
-});
-
 export async function action({ context, request }: Route.ActionArgs) {
   const rpc = getORPCClient(context);
   const formData = await parseFormData(request);
 
-  const validation = CreateTeamFormSchema.transform(async (fields, ctx) => {
+  const validation = CreateTeamSchema.transform(async (fields, ctx) => {
     const { error, data } = await safe(rpc.team.create(fields));
     if (error) {
       ctx.addIssue({ code: 'custom', message: error.message });
@@ -70,7 +45,7 @@ export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   const errors = await serverAction();
   if (errors) return errors;
   toast.success('Team created successfully!');
-  return redirect(href('/dashboard/my-team'));
+  return redirect(href('/dashboard/my-teams'));
 }
 
 export default function CreateTeamPage({ actionData }: Route.ComponentProps) {
