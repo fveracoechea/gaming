@@ -38,8 +38,7 @@ export const CreateTeamSchema = z
     description: z
       .string()
       .trim()
-      .min(3, 'Description must be at least 3 characters')
-      .max(500, 'Description must be 500 characters or less')
+      .max(450, 'Description must be 450 characters or less')
       .optional(),
   })
   .transform(data => ({
