@@ -11,12 +11,13 @@ import { procedures as p } from '../procedure';
  * See a team by ID along with its members.
  * */
 export const findById = p.protected.input(z.uuid()).handler(async ({ input }) => {
-  return db.query.team.findFirst({
+  const team = await db.query.team.findFirst({
     where: eq(schema.team.id, input),
-    with: {
-      members: true,
-    },
+    with: { members: { with: { user: true } } },
   });
+
+  if (!team) throw new ORPCError('NOT_FOUND', { message: 'Team not found' });
+  return team;
 });
 
 export const findMyTeams = p.protected.handler(async ({ context }) => {
