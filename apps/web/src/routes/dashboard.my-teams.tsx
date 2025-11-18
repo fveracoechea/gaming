@@ -2,7 +2,6 @@ import { Link, href } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
 import { Badge } from '@gaming/ui/components/badge';
-import { Button } from '@gaming/ui/components/button';
 import {
   Card,
   CardContent,
@@ -25,18 +24,18 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
   const { teams } = loaderData;
 
   return (
-    <div className="space-y-6 p-6 @container">
+    <div className="@container space-y-6 p-6">
       {/* Header */}
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold">My Teams</h1>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           Overview of your squad, members, and tournament activity.
         </p>
       </div>
 
-      <Card className="border-dashed bg-transparent border-muted-foreground/50 py-4 px-0">
+      <Card className="border-dashed border-muted-foreground/50 bg-transparent px-0 py-4">
         <CardHeader>
-          <CardTitle className="text-xs uppercase font-semibold text-accent">
+          <CardTitle className="text-xs font-semibold text-accent uppercase">
             Multiple teams coming soon
           </CardTitle>
           <CardDescription className="text-xs">
@@ -45,61 +44,58 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
         </CardHeader>
       </Card>
 
-      <div className="grid gap-6 grid-cols-1 @6xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 @6xl:grid-cols-2">
         {teams.map(team => {
           return (
-            <Card>
-              <CardHeader className="flex flex-row items-start justify-between space-y-0">
-                <div className="flex items-start gap-4">
-                  <img
-                    alt={team.name}
-                    className="h-16 w-16 rounded-md border bg-muted object-cover"
-                    src={
-                      team.logoUrl ||
-                      `https://placehold.co/64x64?text=${team.name.charAt(0).toUpperCase()}`
-                    }
-                  />
-                  <div className="space-y-1">
-                    <CardTitle>{team.name}</CardTitle>
-                    <CardDescription className="text-sm max-w-prose">
-                      {team.description}
-                    </CardDescription>
+            <Link to={href('/dashboard/teams/:teamId', { teamId: team.id })}>
+              <Card className="group transition-colors hover:border-primary">
+                <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                  <div className="flex items-center gap-4">
+                    <img
+                      alt={team.name}
+                      className="h-16 w-16 rounded-md border bg-muted object-cover"
+                      src={
+                        team.logoUrl ||
+                        `https://placehold.co/64x64?text=${team.name.charAt(0).toUpperCase()}`
+                      }
+                    />
+                    <div className="space-y-1">
+                      <CardTitle className="transition-colors group-hover:text-primary">
+                        {team.name}
+                      </CardTitle>
+                      <CardDescription className="max-w-prose text-sm">
+                        {team.description}
+                      </CardDescription>
+                    </div>
                   </div>
-                </div>
-                <Button asChild>
-                  <Link to={href('/dashboard/teams/:teamId', { teamId: team.id })}>
-                    Manage Team
-                  </Link>
-                </Button>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-base">Roster and Roles</p>
-
-                {team.members.map(member => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between even:bg-muted/50  py-2 px-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-xs font-medium border">
-                        {getInitials(member.user.name)}
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium leading-none">{member.user.name}</p>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {team.members.map(member => (
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between px-4 py-2 even:bg-muted/50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-xs font-medium">
+                          {getInitials(member.user.name)}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <p className="text-sm leading-none font-medium">
+                            {member.user.name}
+                          </p>
+                          <span className="text-xs text-muted-foreground">
                             Joined {formatDistanceToNow(member.createdAt, { addSuffix: true })}
                           </span>
                         </div>
                       </div>
+                      <Badge variant={member.role === 'CAPTAIN' ? 'secondary' : 'outline'}>
+                        {member.role}
+                      </Badge>
                     </div>
-                    <Badge variant={member.role === 'CAPTAIN' ? 'secondary' : 'outline'}>
-                      {member.role}
-                    </Badge>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+                  ))}
+                </CardContent>
+              </Card>
+            </Link>
           );
         })}
       </div>
