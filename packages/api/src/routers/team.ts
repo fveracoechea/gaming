@@ -2,7 +2,7 @@ import { db } from '@gaming/db';
 import { schema } from '@gaming/db';
 import { CreateTeamSchema } from '@gaming/zod';
 import { ORPCError } from '@orpc/client';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import z from 'zod';
 
 import { procedures as p } from '../procedure';
@@ -61,4 +61,39 @@ export const create = p.protected
 
       return team;
     });
+  });
+
+export const edit = p.protected
+  .input(z.object({ teamId: z.uuid(), update: CreateTeamSchema }))
+  .handler(async ({ input: { teamId, update }, context }) => {
+    const { user } = context.auth;
+
+    const doesTeamExist = !!(await db.query.team.findFirst({
+      columns: { id: true },
+      where: eq(schema.team.id, teamId),
+    }));
+
+    if (!doesTeamExist) throw new ORPCError('NOT_FOUND', { message: 'Team not found' });
+
+    const isCaptain = !!(await db.query.teamMember.findFirst({
+      columns: { id: true },
+      where: and(
+        eq(schema.teamMember.userId, user.id),
+        eq(schema.teamMember.teamId, teamId),
+        eq(schema.teamMember.role, 'CAPTAIN'),
+      ),
+    }));
+
+    if (!isCaptain)
+      throw new ORPCError('FORBIDDEN', {
+        message: 'Only team captains can edit team details',
+      });
+
+    const [team] = await db
+      .update(schema.team)
+      .set(update)
+      .where(eq(schema.team.id, teamId))
+      .returning();
+
+    return team!;
   });

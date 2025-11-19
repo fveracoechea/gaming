@@ -43,12 +43,10 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   const errors = await serverAction();
-
   if (errors) {
     errors.formErrors?.forEach(e => toast.error(e));
-    return;
+    return errors;
   }
-
   toast.success('Team created successfully!');
   return redirect(href('/dashboard/my-teams'));
 }
