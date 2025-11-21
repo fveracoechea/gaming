@@ -1,18 +1,9 @@
 {
+  "type": "module",
   "name": "@gaming/zod",
   "exports": {
-    ".": {
-      "types": "./dist/_index.d.ts",
-      "default": "./src/_index.ts"
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
-    }
-  },
-  "type": "module",
-  "scripts": {
-    "build": "tsdown"
+    ".": "./src/_index.ts",
+    "./*": "./src/*.ts"
   },
   "devDependencies": {
     "tsdown": "catalog:"

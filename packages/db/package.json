@@ -2,21 +2,11 @@
   "name": "@gaming/db",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/_index.d.ts",
-      "default": "./src/_index.ts"
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
-    },
-    "./schema/*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/schema/*.ts"
-    }
+    ".": "./src/_index.ts",
+    "./*": "./src/*.ts",
+    "./schema/*": "./src/schema/*.ts"
   },
   "scripts": {
-    "build": "tsdown",
     "db:push": "bunx drizzle-kit push",
     "db:studio": "bunx drizzle-kit studio",
     "db:generate": "bunx drizzle-kit generate",

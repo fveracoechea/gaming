@@ -1,6 +1,6 @@
 import { db } from '@gaming/db';
 import { schema } from '@gaming/db';
-import { CreateTeamSchema } from '@gaming/zod';
+import { CreateOrUpdateTeamSchema } from '@gaming/zod';
 import { ORPCError } from '@orpc/client';
 import { and, eq } from 'drizzle-orm';
 import z from 'zod';
@@ -38,7 +38,7 @@ export const findMyTeams = p.protected.handler(async ({ context }) => {
  * Create a new team and add the current user as a captain.
  * */
 export const create = p.protected
-  .input(CreateTeamSchema)
+  .input(CreateOrUpdateTeamSchema)
   .errors({
     FORBIDDEN: {
       message: 'Cannot be part of more than one team, upgrade to Pro to join more teams.',
@@ -69,7 +69,7 @@ export const create = p.protected
   });
 
 export const edit = p.protected
-  .input(z.object({ teamId: z.uuid(), update: CreateTeamSchema }))
+  .input(z.object({ teamId: z.uuid(), update: CreateOrUpdateTeamSchema }))
   .errors({
     NOT_FOUND: {
       message: 'Team not found',

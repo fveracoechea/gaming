@@ -1,5 +1,6 @@
 {
   "name": "@gaming/ui",
+  "type": "module",
   "exports": {
     "./components/*": "./components/*.tsx",
     "./blocks/*": "./blocks/**/components/*.tsx",

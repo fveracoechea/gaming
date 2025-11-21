@@ -1,18 +1,9 @@
 {
   "name": "@gaming/api",
-  "exports": {
-    "./routers": {
-      "types": "./dist/routers/_index.d.ts",
-      "default": "./src/routers/_index.ts"
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
-    }
-  },
   "type": "module",
-  "scripts": {
-    "build": "tsdown"
+  "exports": {
+    "./*": "./src/*.ts",
+    "./routers": "./src/routers/_index.ts"
   },
   "devDependencies": {
     "tsdown": "catalog:",
