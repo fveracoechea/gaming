@@ -8,10 +8,7 @@ export default $config({
       protect: ['production'].includes(input?.stage),
       home: 'local',
       providers: {
-        railway: {
-          version: '0.4.4',
-          token: new sst.Secret('RAILWAY_TOKEN').value,
-        },
+        railway: '0.4.4',
       },
     };
   },
@@ -51,12 +48,5 @@ export default $config({
       name: 'DATABASE_URL',
       value: $interpolate`\${{${db.name}.DATABASE_URL}}`,
     });
-
-    return {
-      projectId: project.id,
-      environmentId: env.id,
-      databaseId: db.id,
-      reactAppId: reactApp.id,
-    };
   },
 });
