@@ -24,7 +24,6 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 
 export default function TeamDetails({ loaderData }: Route.ComponentProps) {
   const { team } = loaderData;
-  const editFormId = 'edit-team-form';
   return (
     <div className="@container space-y-6 p-6">
       <header className="flex flex-col gap-1">
@@ -87,7 +86,7 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <TeamEditForm id={editFormId} team={team} />
+          <TeamEditForm team={team} />
         </CardContent>
       </Card>
 

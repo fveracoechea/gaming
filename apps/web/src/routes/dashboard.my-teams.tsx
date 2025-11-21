@@ -2,6 +2,7 @@ import { Link, href } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
 import { Badge } from '@gaming/ui/components/badge';
+import { Button } from '@gaming/ui/components/button';
 import {
   Card,
   CardContent,
@@ -11,6 +12,7 @@ import {
 } from '@gaming/ui/components/card';
 import { getInitials } from '@gaming/ui/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { PlusIcon } from 'lucide-react';
 
 import type { Route } from './+types/dashboard.my-teams';
 
@@ -26,19 +28,27 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
   return (
     <div className="@container space-y-6 p-6">
       {/* Header */}
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold">My Teams</h1>
-        <p className="text-sm text-muted-foreground">
-          Overview of your squad, members, and tournament activity.
-        </p>
+      <div className="flex items-center justify-between gap-6">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold">My Teams</h1>
+          <p className="text-sm text-muted-foreground">
+            Overview of your squad, members, and tournament activity.
+          </p>
+        </div>
+        <Button asChild>
+          <Link to={href('/dashboard/create-team')}>
+            <PlusIcon />
+            <span> Create New Team</span>
+          </Link>
+        </Button>
       </div>
 
-      <Card className="border-dashed border-muted-foreground/50 bg-transparent px-0 py-4">
+      <Card className="border-dashed border-muted-foreground bg-transparent px-0 py-4">
         <CardHeader>
           <CardTitle className="text-xs font-semibold text-accent uppercase">
             Multiple teams coming soon
           </CardTitle>
-          <CardDescription className="text-xs">
+          <CardDescription>
             Soon you will be able to belong to up to 5 teams with the Pro plan.
           </CardDescription>
         </CardHeader>

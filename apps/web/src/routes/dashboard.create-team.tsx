@@ -1,8 +1,4 @@
-import { Form, href, redirect, useNavigation } from 'react-router';
-
-import { getORPCClient } from '@/lib/middlewares.server';
-import { Badge } from '@gaming/ui/components/badge';
-import { Button } from '@gaming/ui/components/button';
+import { TeamCreateForm } from '@/resources/team.create';
 import {
   Card,
   CardContent,
@@ -10,50 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@gaming/ui/components/card';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '@gaming/ui/components/field';
-import { FieldError } from '@gaming/ui/components/field';
-import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
-import { toast } from '@gaming/ui/components/sonner';
-import { Spinner } from '@gaming/ui/components/spinner';
-import { CreateTeamSchema } from '@gaming/zod';
-import { safe } from '@orpc/server';
-import { parseFormData } from '@remix-run/form-data-parser';
-import z from 'zod';
 
 import type { Route } from './+types/dashboard.create-team';
 
-export async function action({ context, request }: Route.ActionArgs) {
-  const rpc = getORPCClient(context);
-  const formData = await parseFormData(request);
-
-  const validation = CreateTeamSchema.transform(async (fields, ctx) => {
-    const { error, data } = await safe(rpc.team.create(fields));
-    if (error) {
-      ctx.addIssue({ code: 'custom', message: error.message });
-      return z.NEVER;
-    }
-    return data;
-  });
-
-  const { error } = await validation.safeParseAsync(Object.fromEntries(formData));
-  if (error) return z.flattenError(error);
-  return null;
-}
-
-export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  const errors = await serverAction();
-  if (errors) {
-    errors.formErrors?.forEach(e => toast.error(e));
-    return errors;
-  }
-  toast.success('Team created successfully!');
-  return redirect(href('/dashboard/my-teams'));
-}
-
-export default function CreateTeamPage({ actionData }: Route.ComponentProps) {
-  const { fieldErrors, formErrors } = actionData ?? {};
-  const navigation = useNavigation();
+export default function CreateTeamPage({}: Route.ComponentProps) {
   return (
     <div className="p-6 space-y-6">
       <div className="space-y-2">
@@ -70,110 +27,7 @@ export default function CreateTeamPage({ actionData }: Route.ComponentProps) {
             <CardDescription>Public information shown on tournaments.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Form method="post" noValidate>
-              {formErrors?.length ? (
-                <FieldError
-                  errors={formErrors.map(message => ({ message }))}
-                  className="mb-4"
-                />
-              ) : null}
-              <FieldGroup>
-                <Field data-invalid={!!fieldErrors?.name?.length}>
-                  <FieldLabel htmlFor="team-name">Team Name</FieldLabel>
-                  <Input
-                    id="team-name"
-                    name="name"
-                    placeholder="Unique name identifying your team."
-                    required
-                    aria-invalid={!!fieldErrors?.name?.length}
-                  />
-                  <FieldError errors={fieldErrors?.name?.map(message => ({ message }))} />
-                </Field>
-
-                <Field data-invalid={!!fieldErrors?.logoUrl?.length}>
-                  <FieldLabel htmlFor="team-logo">Logo URL</FieldLabel>
-                  <Input
-                    id="team-logo"
-                    name="logoUrl"
-                    placeholder="External image link (64x64 recommended)."
-                    aria-invalid={!!fieldErrors?.logoUrl?.length}
-                  />
-                  <FieldError errors={fieldErrors?.logoUrl?.map(message => ({ message }))} />
-                </Field>
-
-                <Field data-invalid={!!fieldErrors?.description?.length}>
-                  <FieldLabel htmlFor="team-desc">Description / Bio</FieldLabel>
-                  <textarea
-                    id="team-desc"
-                    name="description"
-                    placeholder="Tell others what your squad excels at."
-                    className="min-h-32 w-full rounded-md border bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                    aria-invalid={!!fieldErrors?.description?.length}
-                  />
-                  <FieldError
-                    errors={fieldErrors?.description?.map(message => ({ message }))}
-                  />
-                </Field>
-
-                <Field>
-                  <FieldLabel>Primary Game</FieldLabel>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-                    {['Dota 2', 'CS2', 'Rocket League', 'League of Legends'].map(game => (
-                      <button
-                        key={game}
-                        type="button"
-                        className="flex flex-col items-center justify-center rounded-lg border border-dashed border-muted-foreground/25 p-4 text-center hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="text-sm font-medium">{game}</div>
-                      </button>
-                    ))}
-                  </div>
-                  <FieldDescription>Future: Select one then add alternates.</FieldDescription>
-                </Field>
-
-                <Field>
-                  <FieldLabel>Recruitment Status</FieldLabel>
-                  <div className="flex gap-3 flex-wrap">
-                    {['OPEN', 'LOOKING FOR ONE', 'CLOSED'].map(status => (
-                      <Badge key={status} variant="outline" className="cursor-pointer">
-                        {status}
-                      </Badge>
-                    ))}
-                  </div>
-                  <FieldDescription>Display whether you accept new members.</FieldDescription>
-                </Field>
-
-                <Field>
-                  <FieldLabel>Preferred Formats</FieldLabel>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      'Single Elimination',
-                      'Double Elimination',
-                      'Round Robin',
-                      'Swiss',
-                      'League',
-                    ].map(format => (
-                      <Badge key={format} variant="secondary" className="cursor-pointer">
-                        {format}
-                      </Badge>
-                    ))}
-                  </div>
-                  <FieldDescription>
-                    Inform organizers what formats your team likes.
-                  </FieldDescription>
-                </Field>
-
-                <Field>
-                  <Button type="submit" disabled={navigation.state === 'submitting'}>
-                    {navigation.state === 'submitting' ? (
-                      <Spinner />
-                    ) : (
-                      <span>Create Team</span>
-                    )}
-                  </Button>
-                </Field>
-              </FieldGroup>
-            </Form>
+            <TeamCreateForm />
           </CardContent>
         </Card>
 

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { href, useFetcher } from 'react-router';
+import { href, redirect, useFetcher } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
 import { createValidator } from '@/lib/validator';
@@ -15,56 +15,48 @@ import type { Route } from './+types/team.edit.$teamId';
 
 const validator = createValidator(CreateOrUpdateTeamSchema);
 
-export async function action({ context, request, params: { teamId } }: Route.ActionArgs) {
+export async function action({ context, request }: Route.ActionArgs) {
   const rpc = getORPCClient(context);
 
   const [fieldErrors, formValues] = await validator.validate(await request.json());
   if (fieldErrors) return { fieldErrors };
 
-  const { error } = await safe(rpc.team.edit({ teamId, update: formValues }));
+  const [error] = await safe(rpc.team.create(formValues));
   if (isDefinedError(error)) return { error: error.message };
   else if (error) return { error: 'Unable to edit team, an unexpected error occurred.' };
-  return { success: 'Team updated successfully.' };
+  return { success: 'Team created successfully.' };
 }
 
 export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  const result = await serverAction();
-  if (result.error) toast.error(result.error);
-  if (result.success) toast.success(result.success);
-  return result.fieldErrors;
+  const response = await serverAction();
+  if (response.error) {
+    toast.error(response.error);
+    return;
+  }
+  if (response.fieldErrors) return response.fieldErrors;
+  if (response.success) toast.success(response.success);
+  return redirect(href('/dashboard/my-teams'));
 }
 
-type Props = {
-  team: {
-    id: string;
-    name: string;
-    logoUrl: string | null;
-    description: string | null;
-  };
-};
+type Props = {};
 
-export function TeamEditForm({ team }: Props) {
+export function TeamCreateForm({}: Props) {
   const fetcher = useFetcher();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors: errors, isDirty },
   } = useForm({
     errors: fetcher.data,
     resolver: validator.resolver,
-    values: {
-      name: team.name || '',
-      logoUrl: team.logoUrl || '',
-      description: team.description || '',
-    },
   });
 
   const onSubmit = handleSubmit(async fields => {
     await fetcher.submit(fields, {
       method: 'post',
       encType: 'application/json',
-      action: href('/resource/team/edit/:teamId', { teamId: team.id }),
+      action: href('/resource/team/create'),
     });
   });
 
@@ -108,11 +100,11 @@ export function TeamEditForm({ team }: Props) {
 
         <Field orientation="horizontal" className="justify-end">
           {fetcher.state === 'idle' ? (
-            <Button type="submit" variant="outline" disabled={!isDirty}>
+            <Button type="submit" disabled={!isDirty}>
               Save Changes
             </Button>
           ) : (
-            <Button disabled variant="outline">
+            <Button>
               <Spinner />
               <span>Saving...</span>
             </Button>

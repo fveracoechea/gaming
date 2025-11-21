@@ -1,33 +1,32 @@
+import type { FieldErrors, FieldValues } from 'react-hook-form';
+
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import type { z } from 'zod';
+import { type StandardSchemaV1 } from '@standard-schema/spec';
 
-export type FieldErrors = Record<string, unknown>;
-export type ValidationErrorResult = [FieldErrors, null];
-export type ValidationSuccessResult<T> = [null, T];
+type ValidationError<T extends FieldValues> = [FieldErrors<T>, null];
+type ValidationSuccess<T extends FieldValues> = [null, T];
 
-export function createValidator<S extends z.ZodType>(schema: S) {
-  type Output = z.output<S>;
+export type ValidationResult<Input extends FieldValues, Output extends FieldValues> =
+  | ValidationError<Input>
+  | ValidationSuccess<Output>;
 
-  // @ts-expect-error standardSchemaResolver expects a different schema type
+export function createValidator<Input extends FieldValues, Output extends FieldValues>(
+  schema: StandardSchemaV1<Input, Output>,
+) {
   const resolver = standardSchemaResolver(schema);
-
   return {
     resolver,
-    async tryValidate(body: unknown) {
-      // @ts-expect-error standardSchemaResolver has different types
-      const { errors, values } = await resolver(body, undefined, {
+    async validate(body: unknown): Promise<ValidationResult<Input, Output>> {
+      const { errors, values } = await resolver(body as Input, undefined, {
         shouldUseNativeValidation: false,
         fields: {},
       });
 
       if (Object.values(errors).length) {
-        return [errors, null] as ValidationErrorResult;
+        return [errors as FieldErrors<Input>, null];
       }
 
-      return [null, values] as ValidationSuccessResult<Output>;
-    },
-    async validate(body: unknown) {
-      return await schema.parseAsync(body);
+      return [null, values as Output];
     },
   };
 }

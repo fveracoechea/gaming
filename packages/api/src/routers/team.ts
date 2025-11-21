@@ -10,15 +10,18 @@ import { procedures as p } from '../procedure';
 /**
  * See a team by ID along with its members.
  * */
-export const findById = p.protected.input(z.uuid()).handler(async ({ input }) => {
-  const team = await db.query.team.findFirst({
-    where: eq(schema.team.id, input),
-    with: { members: { with: { user: true } } },
-  });
+export const findById = p.protected
+  .input(z.uuid())
+  .errors({ NOT_FOUND: { message: 'Team not found' } })
+  .handler(async ({ input, errors }) => {
+    const team = await db.query.team.findFirst({
+      where: eq(schema.team.id, input),
+      with: { members: { with: { user: true } } },
+    });
 
-  if (!team) throw new ORPCError('NOT_FOUND', { message: 'Team not found' });
-  return team;
-});
+    if (!team) throw errors.NOT_FOUND();
+    return team;
+  });
 
 export const findMyTeams = p.protected.handler(async ({ context }) => {
   const { user } = context.auth;
@@ -36,7 +39,12 @@ export const findMyTeams = p.protected.handler(async ({ context }) => {
  * */
 export const create = p.protected
   .input(CreateTeamSchema)
-  .handler(async ({ input, context }) => {
+  .errors({
+    FORBIDDEN: {
+      message: 'Cannot be part of more than one team, upgrade to Pro to join more teams.',
+    },
+  })
+  .handler(async ({ input, context, errors }) => {
     const { user } = context.auth;
 
     const teamCount = await db.$count(
@@ -44,12 +52,9 @@ export const create = p.protected
       eq(schema.teamMember.userId, user.id),
     );
 
-    if (teamCount > 1)
-      throw new ORPCError('FORBIDDEN', {
-        message: 'Cannot be part of more than one team, upgrade to Pro to join more teams.',
-      });
+    if (teamCount > 1) throw errors.FORBIDDEN();
 
-    return db.transaction(async tx => {
+    return await db.transaction(async tx => {
       const [team] = await tx.insert(schema.team).values(input).returning();
       if (!team) throw new ORPCError('INTERNAL', { message: 'Failed to create team' });
 

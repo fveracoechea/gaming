@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, href } from 'react-router';
 
 import {
   Sidebar,
@@ -33,12 +33,12 @@ const data = {
           url: '/dashboard/my-profile',
         },
         {
-          title: 'My Stats',
-          url: '/dashboard/stats',
+          title: 'My Teams',
+          url: href('/dashboard/my-teams'),
         },
         {
-          title: 'Earnings',
-          url: '/dashboard/earnings',
+          title: 'My Stats',
+          url: '/dashboard/stats',
         },
       ],
     },
@@ -75,14 +75,6 @@ const data = {
         {
           title: 'Find Teams',
           url: '/teams',
-        },
-        {
-          title: 'My Team',
-          url: '/dashboard/my-teams',
-        },
-        {
-          title: 'Create Team',
-          url: '/dashboard/create-team',
         },
         {
           title: 'Player Directory',

@@ -26,7 +26,7 @@ function getTeamInitials(name: string): string {
   return parts[0]?.[0]?.toUpperCase() || '' + parts?.[1]?.[0]?.toUpperCase() || '';
 }
 
-export const CreateTeamSchema = z
+export const CreateOrUpdateTeamSchema = z
   .object({
     name: z
       .string({ error: 'Team name is required' })
