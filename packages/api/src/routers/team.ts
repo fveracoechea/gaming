@@ -65,7 +65,15 @@ export const create = p.protected
 
 export const edit = p.protected
   .input(z.object({ teamId: z.uuid(), update: CreateTeamSchema }))
-  .handler(async ({ input: { teamId, update }, context }) => {
+  .errors({
+    NOT_FOUND: {
+      message: 'Team not found',
+    },
+    FORBIDDEN: {
+      message: 'Only team captains can edit team details',
+    },
+  })
+  .handler(async ({ errors, input: { teamId, update }, context }) => {
     const { user } = context.auth;
 
     const doesTeamExist = !!(await db.query.team.findFirst({
@@ -73,7 +81,7 @@ export const edit = p.protected
       where: eq(schema.team.id, teamId),
     }));
 
-    if (!doesTeamExist) throw new ORPCError('NOT_FOUND', { message: 'Team not found' });
+    if (!doesTeamExist) throw errors.NOT_FOUND();
 
     const isCaptain = !!(await db.query.teamMember.findFirst({
       columns: { id: true },
@@ -84,10 +92,7 @@ export const edit = p.protected
       ),
     }));
 
-    if (!isCaptain)
-      throw new ORPCError('FORBIDDEN', {
-        message: 'Only team captains can edit team details',
-      });
+    if (!isCaptain) throw errors.FORBIDDEN();
 
     const [team] = await db
       .update(schema.team)

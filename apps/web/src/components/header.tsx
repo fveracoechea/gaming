@@ -1,9 +1,8 @@
 import { Link, href } from 'react-router';
 
 import { Button } from '@gaming/ui/components/button';
-import { TrophyIcon } from 'lucide-react';
 
-import { AppLogo } from './app-logo';
+import { AppLogo } from '@/components/app-logo';
 
 export function Header() {
   return (

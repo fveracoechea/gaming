@@ -53,8 +53,8 @@ export const [oprcServerMiddleware, getORPCClient] = createSingletonMiddleware({
 export const requireAuthMiddleware: MiddlewareFunction<Response> = async ({ context }) => {
   try {
     const rpc = getORPCClient(context);
-    const auth = await rpc.whoami();
-    if (!auth.user) throw data('Unauthorized', { status: 401 });
+    const whoami = await rpc.whoami();
+    if (!whoami.user) throw data('Unauthorized', { status: 401 });
   } catch (error) {
     throw redirect(href('/sign-in'));
   }

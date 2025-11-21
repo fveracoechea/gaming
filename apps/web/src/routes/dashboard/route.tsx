@@ -12,10 +12,20 @@ import {
 import { Separator } from '@gaming/ui/components/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@gaming/ui/components/sidebar';
 
-import { AppSidebar } from '../components/app-sidebar';
-import type { Route } from './+types/dashboard';
+import type { Route } from './+types/route';
+import { AppSidebar } from './app-sidebar';
 
 export const middleware: Route.MiddlewareFunction[] = [requireAuthMiddleware];
+
+/**
+ * By adding a `loader`, we force the `requireAuthMiddleware` to run on every
+ * client-side navigation involving this route.
+ *
+ * Without it, the middleware would only run on the initial page load.
+ */
+export async function loader() {
+  return null;
+}
 
 export default function DashboarLayout() {
   return (
