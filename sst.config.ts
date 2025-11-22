@@ -24,29 +24,41 @@ export default $config({
       name: $app.stage,
     });
 
-    // Database service
-    const db = new railway.Service('database', {
-      name: 'PosgreSQL Database',
+    const db = new railway.Service(`database-service-${$app.stage}`, {
+      name: `PostgreSQL Database - ${$app.stage}`,
       projectId: project.id,
-      region: 'us-east1',
+      region: 'us-east4',
       sourceImage: 'ghcr.io/railwayapp-templates/postgres-ssl:17.6',
     });
 
-    // React app service
-    const reactApp = new railway.Service('react-app', {
-      name: 'React Router WebApp',
+    const webapp = new railway.Service(`webapp-service-${$app.stage}`, {
+      name: `React Router WebApp - ${$app.stage}`,
       projectId: project.id,
-      region: 'us-east1',
+      region: 'us-east4',
       sourceRepo: 'fveracoechea/gaming',
       sourceRepoBranch: 'main',
       rootDirectory: 'apps/web',
     });
 
-    new railway.Variable('database-url', {
+    new railway.Variable('auth-secret-var', {
       environmentId: env.id,
-      serviceId: reactApp.id,
+      serviceId: webapp.id,
+      name: 'BETTER_AUTH_SECRET',
+      value: new sst.Secret('BETTER_AUTH_SECRET').value,
+    });
+
+    new railway.Variable('database-url-var', {
+      environmentId: env.id,
+      serviceId: webapp.id,
       name: 'DATABASE_URL',
       value: $interpolate`\${{${db.name}.DATABASE_URL}}`,
+    });
+
+    new railway.Variable('vite-app-url-var', {
+      environmentId: env.id,
+      serviceId: webapp.id,
+      name: 'VITE_APP_URL',
+      value: $interpolate`\${{${webapp.name}.RAILWAY_PUBLIC_DOMAIN}}`,
     });
   },
 });

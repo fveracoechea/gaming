@@ -1,5 +1,6 @@
 import { db } from '@gaming/db';
 import * as authSchema from '@gaming/db/schema/auth';
+import { env } from '@gaming/zod';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin, username } from 'better-auth/plugins';
@@ -10,7 +11,7 @@ export const auth = betterAuth({
     provider: 'pg',
     schema: authSchema,
   }),
-  trustedOrigins: [process.env.CORS_ORIGIN || ''],
+  trustedOrigins: [env.VITE_APP_URL],
   emailAndPassword: {
     enabled: true,
   },

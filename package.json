@@ -21,6 +21,7 @@
       "react-dom": "19.2.0",
       "tsdown": "^0.15.5",
       "typescript": "^5.8.2",
+      "sst": "3.17.23",
       "zod": "^4.1.11"
     },
     "packages": [

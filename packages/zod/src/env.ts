@@ -5,12 +5,11 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.url(),
     DATABSE_SSL: z.stringbool().default(false),
-    CORS_ORIGINS: z.url().default('http://localhost:5173'),
     BETTER_AUTH_SECRET: z.string().min(28),
   },
 
   client: {
-    VITE_AUTH_URL: z.url().default('http://localhost:5173'),
+    VITE_APP_URL: z.url().default('http://localhost:5173'),
   },
 
   /**

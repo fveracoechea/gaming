@@ -121,6 +121,7 @@
         "@gaming/zod": "workspace:*",
         "better-auth": "catalog:",
         "dotenv": "catalog:",
+        "sst": "catalog:",
         "zod": "catalog:",
       },
       "devDependencies": {
@@ -208,6 +209,7 @@
     "pg": "^8.14.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "sst": "3.17.23",
     "tsdown": "^0.15.5",
     "typescript": "^5.8.2",
     "zod": "^4.1.11",

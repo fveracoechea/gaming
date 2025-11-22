@@ -12,6 +12,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "sst": "catalog:",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:",
