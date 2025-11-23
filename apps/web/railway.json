@@ -6,5 +6,10 @@
     "buildCommand": "bun run build",
     "installCommand": "bun install",
     "startCommand": "bun run start"
+  },
+  "deploy": {
+    "region": "us-east4-eqdc4a",
+    "startCommand": "bun run start"
+    "healthcheckPath": "/",
   }
 }
