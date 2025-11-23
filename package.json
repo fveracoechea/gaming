@@ -30,7 +30,8 @@
   },
   "scripts": {
     "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/server.ts",
-    "build": "turbo build",
+    "build": "bun run web:build",
+    "start": "bun run web:start",
     "check-types": "turbo check-types",
     "db:down": "turbo -F @gaming/db db:down",
     "db:generate": "turbo -F @gaming/db db:generate",
@@ -41,12 +42,10 @@
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:studio": "turbo -F @gaming/db db:studio",
     "db:watch": "turbo -F @gaming/db db:watch",
-    "dev": "sst dev bun run web:dev",
+    "dev": "bun run web:dev",
     "web:dev": "bun run -F web dev",
     "web:build": "bun run -F web build",
     "web:start": "bun run -F web start",
-    "deploy": "sst deploy --stage production",
-    "deploy:staging": "sst deploy --stage staging",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only"
