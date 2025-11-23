@@ -9,7 +9,7 @@
   },
   "deploy": {
     "region": "us-east4-eqdc4a",
-    "startCommand": "bun run start"
-    "healthcheckPath": "/",
+    "startCommand": "bun run start",
+    "healthcheckPath": "/"
   }
 }
