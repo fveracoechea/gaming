@@ -21,11 +21,10 @@
       "react-dom": "19.2.0",
       "tsdown": "^0.15.5",
       "typescript": "^5.8.2",
-      "sst": "3.17.23",
       "zod": "^4.1.11"
     },
     "packages": [
-      "apps/*",
+      "apps/web",
       "packages/*"
     ]
   },
@@ -42,10 +41,12 @@
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:studio": "turbo -F @gaming/db db:studio",
     "db:watch": "turbo -F @gaming/db db:watch",
-    "dev": "turbo dev",
+    "dev": "sst dev bun run web:dev",
     "web:dev": "bun run -F web dev",
     "web:build": "bun run -F web build",
     "web:start": "bun run -F web start",
+    "deploy": "sst deploy --stage production",
+    "deploy:staging": "sst deploy --stage staging",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only"
@@ -53,7 +54,6 @@
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
     "dotenv": "^17.2.2",
-    "sst": "3.17.23",
     "zod": "^4.1.11"
   },
   "devDependencies": {
