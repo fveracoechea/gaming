@@ -1,6 +1,22 @@
 name: gaming
 
 services:
+  web:
+    build:
+      context: .
+      dockerfile: infra/web.Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - apps/web/.env
+    environment:
+      DATABASE_URL: postgresql://postgres:mypassword@postgres:5432/gaming
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - gaming-network
+
   postgres:
     image: postgres:17
     container_name: gaming-postgres
@@ -18,6 +34,12 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - gaming-network
+
+networks:
+  gaming-network:
+    driver: bridge
 
 volumes:
   gaming_postgres_data:
