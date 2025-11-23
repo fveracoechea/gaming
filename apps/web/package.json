@@ -8,6 +8,7 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
+  "packageManager": "bun@1.3.0",
   "dependencies": {
     "@edgefirst-dev/batcher": "^1.0.1",
     "@gaming/api": "workspace:*",
