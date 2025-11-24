@@ -3,12 +3,12 @@ name: gaming
 services:
   web:
     build:
-      context: .
-      dockerfile: infra/web.Dockerfile
+      context: ..
+      dockerfile: web.Dockerfile
     ports:
       - '3000:3000'
     env_file:
-      - apps/web/.env
+      - ../apps/web/.env
     environment:
       DATABASE_URL: postgresql://postgres:mypassword@postgres:5432/gaming
     depends_on:
