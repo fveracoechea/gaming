@@ -5,6 +5,7 @@ WORKDIR /app
 # Copy workspace configuration files first
 COPY package.json bun.lock bunfig.toml ./
 COPY turbo.json ./
+COPY tsconfig.json tsconfig.base.json ./
 
 # Copy all package.json files to install dependencies
 COPY apps/web/package.json ./apps/web/
@@ -21,10 +22,8 @@ RUN bun install --frozen-lockfile
 FROM oven/bun:1.3 AS builder
 WORKDIR /app
 
-# Copy installed dependencies from previous stage
-COPY --from=dependencies /app/node_modules ./node_modules
-COPY --from=dependencies /app/package.json ./package.json
-COPY --from=dependencies /app/bun.lock ./bun.lock
+# Copy everything from dependencies stage (includes all node_modules)
+COPY --from=dependencies /app ./
 
 # Copy all source code (needed for workspace dependencies)
 COPY apps/web ./apps/web
