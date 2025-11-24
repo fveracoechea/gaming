@@ -31,7 +31,6 @@
   "scripts": {
     "auth:generate": "bunx @better-auth/cli@latest generate --output ./packages/db/src/schema/auth.ts --config ./packages/auth/src/server.ts",
     "build": "bun run web:build",
-    "start": "bun run web:start",
     "check-types": "turbo check-types",
     "db:down": "turbo -F @gaming/db db:down",
     "db:generate": "turbo -F @gaming/db db:generate",
@@ -43,16 +42,18 @@
     "db:studio": "turbo -F @gaming/db db:studio",
     "db:watch": "turbo -F @gaming/db db:watch",
     "dev": "bun run web:dev",
-    "web:dev": "bun run -F web dev",
-    "web:build": "bun run -F web build",
-    "web:start": "bun run -F web start",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write",
-    "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only"
+    "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
+    "start": "bun run web:start",
+    "web:build": "bun run -F web build",
+    "web:dev": "bun run -F web dev",
+    "web:start": "bun run -F web start"
   },
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
     "dotenv": "^17.2.2",
+    "sst": "3.17.23",
     "zod": "^4.1.11"
   },
   "devDependencies": {

@@ -1,15 +1,6 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
-    "builder": "RAILPACK",
-    "railpackVersion": "0.13.0",
-    "buildCommand": "bun run build",
-    "installCommand": "bun install",
-    "startCommand": "bun run start"
-  },
-  "deploy": {
-    "region": "us-east4-eqdc4a",
-    "startCommand": "bun run start",
-    "healthcheckPath": "/"
+    "dockerfilePath": "../../infra/web.Dockerfile"
   }
 }
