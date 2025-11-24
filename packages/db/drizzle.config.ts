@@ -14,6 +14,7 @@ export default defineConfig({
   dialect: 'postgresql',
   casing: 'snake_case',
   dbCredentials: {
+    ssl: process.env.DATABASE_SSL === 'true',
     url: process.env.DATABASE_URL || '',
   },
 });
