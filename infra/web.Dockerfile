@@ -9,7 +9,6 @@ COPY tsconfig.json tsconfig.base.json ./
 
 # Copy all package.json files to install dependencies
 COPY apps/web/package.json ./apps/web/
-COPY packages/api/package.json ./packages/api/
 COPY packages/auth/package.json ./packages/auth/
 COPY packages/db/package.json ./packages/db/
 COPY packages/ui/package.json ./packages/ui/
