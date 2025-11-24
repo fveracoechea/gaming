@@ -38,7 +38,7 @@ export default $config({
       region: 'us-east4-eqdc4a',
       sourceRepo: 'https://github.com/fveracoechea/gaming.git',
       sourceRepoBranch: 'main',
-      rootDirectory: 'apps/web',
+      // rootDirectory: 'apps/web',
     });
 
     new railway.Variable('DATABASE_URL', {

@@ -5,10 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "BETTER_AUTH_SECRET": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
