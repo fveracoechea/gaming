@@ -10,7 +10,7 @@ export const env = createEnv({
 
   client: {
     VITE_APP_URL: z
-      .url()
+      .string()
       .optional()
       .transform(v => (v ? `https://${v}` : 'http://localhost:5173')),
   },
