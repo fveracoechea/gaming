@@ -9,6 +9,7 @@ export async function loader({ context }: Route.LoaderArgs) {
     dbOK: await rpc.healthCheck(),
     stage: env.STAGE,
     appURL: env.VITE_APP_URL,
+    dbSSL: env.DATABASE_SSL,
   };
 }
 
