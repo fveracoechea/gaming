@@ -71,10 +71,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <AuthLayoutTemplate image="/error.jpg">
+    <AuthLayoutTemplate image="/error-page.jpg">
       <section className="mx-auto flex flex-1 items-center pb-10">
         <div className="flex flex-col items-center gap-4">
-          <TriangleAlert className="stroke-destructive-foreground h-24 w-24" />
+          <TriangleAlert className="stroke-destructive h-24 w-24" />
           <div className="flex max-w-screen-md flex-col justify-center gap-0 text-center">
             <Typography.Large>{headline}</Typography.Large>
             <Typography.Muted>{message}</Typography.Muted>
@@ -87,7 +87,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
           {stack && (
             <div className="border-border max-w-full rounded-md border p-2 text-sm">
-              <pre className="max-w-screen-2xl overflow-x-auto p-4">
+              <pre className="max-w-screen-xl overflow-x-auto p-4">
                 <code>{stack}</code>
               </pre>
             </div>
@@ -108,7 +108,9 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
 
   return (
     <AuthLayoutTemplate image={image}>
-      <Outlet />
+      <div className="w-full max-w-xs">
+        <Outlet />
+      </div>
     </AuthLayoutTemplate>
   );
 }
