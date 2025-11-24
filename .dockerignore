@@ -1,18 +1,18 @@
-# Dependencies
-node_modules
-.pnp
-.pnp.js
+# Dependencies (will be installed in container)
+**/node_modules
+**/.pnp
+**/.pnp.js
 
-# Build outputs
-build
-dist
-.turbo
-.cache
-.vite
+# Build outputs (will be built in container)
+**/build
+**/dist
+**/.turbo
+**/.cache
+**/.vite
 
 # Testing
-coverage
-.nyc_output
+**/coverage
+**/.nyc_output
 
 # Development
 .env
@@ -45,14 +45,14 @@ Thumbs.db
 .git
 .gitignore
 
-# Docker
-Dockerfile
+# Docker (keep docker-compose.yml excluded but not Dockerfile itself)
 .dockerignore
 docker-compose.yml
 
-# Documentation
+# Documentation (keep README)
 *.md
 !README.md
 
 # Misc
 .ruler
+.sst
