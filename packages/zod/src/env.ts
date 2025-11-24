@@ -6,6 +6,7 @@ export const env = createEnv({
     DATABASE_URL: z.url(),
     DATABASE_SSL: z.stringbool().default(false),
     BETTER_AUTH_SECRET: z.string().min(28),
+    STAGE: z.enum(['local', 'development', 'production']).default('local'),
   },
 
   client: {
