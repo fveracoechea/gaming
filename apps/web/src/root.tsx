@@ -15,9 +15,15 @@ import {
   secureHeadersMiddleware,
 } from '@/lib/middlewares.server';
 import { Toaster } from '@gaming/ui/components/sonner';
+import { env } from '@gaming/zod';
 
 import type { Route } from './+types/root';
 import stylesheet from './main.css?url';
+
+export function loader() {
+  console.log('Root loader', env);
+  return null;
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

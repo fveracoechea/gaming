@@ -1,8 +1,11 @@
 import dotenv from 'dotenv';
 import { defineConfig } from 'drizzle-kit';
 
+let stage = 'local';
+if (process.env.STAGE) stage = process.env.STAGE;
+
 dotenv.config({
-  path: '../../apps/server/.env',
+  path: '../../infra/.env.' + stage,
 });
 
 export default defineConfig({

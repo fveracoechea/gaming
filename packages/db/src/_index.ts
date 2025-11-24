@@ -9,7 +9,7 @@ export const db = drizzle({
   schema,
   casing: 'snake_case',
   connection: {
-    ssl: env.DATABSE_SSL,
+    ssl: env.DATABASE_SSL,
     connectionString: env.DATABASE_URL,
   },
 });
