@@ -2,9 +2,11 @@ import { type MiddlewareFunction, data, href, redirect } from 'react-router';
 
 import { createORPCContext } from '@gaming/api/context';
 import { appRouter } from '@gaming/api/routers';
+import { env } from '@gaming/zod';
 import { createRouterClient } from '@orpc/server';
 import { createBatcherMiddleware } from 'remix-utils/middleware/batcher';
 import { createContextStorageMiddleware } from 'remix-utils/middleware/context-storage';
+import { createCorsMiddleware } from 'remix-utils/middleware/cors';
 import { createLoggerMiddleware } from 'remix-utils/middleware/logger';
 import { createSecureHeadersMiddleware } from 'remix-utils/middleware/secure-headers';
 import { createSingletonMiddleware } from 'remix-utils/middleware/singleton';
@@ -24,6 +26,16 @@ export const [loggerMiddleware] = createLoggerMiddleware();
  * Let's you set secure HTTP headers on the response
  */
 export const [secureHeadersMiddleware] = createSecureHeadersMiddleware();
+
+/**
+ * Enables CORS for the specified origin and methods.
+ */
+export const [corsMiddleware] = createCorsMiddleware({
+  origin: env.VITE_APP_URL,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+});
 
 /**
  * Let's you store and retrieve data that is scoped to the current request context.

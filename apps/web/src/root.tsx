@@ -10,6 +10,7 @@ import {
 import {
   batcherMiddleware,
   contextStorageMiddleware,
+  corsMiddleware,
   loggerMiddleware,
   oprcServerMiddleware,
   secureHeadersMiddleware,
@@ -50,6 +51,7 @@ export const middleware = [
   contextStorageMiddleware,
   batcherMiddleware,
   secureHeadersMiddleware,
+  corsMiddleware,
   loggerMiddleware,
   oprcServerMiddleware,
 ];
