@@ -1,4 +1,5 @@
 FROM oven/bun:1.3 AS dependencies-env
+RUN ls .
 COPY . /app
 WORKDIR /app
 
