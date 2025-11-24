@@ -4,7 +4,7 @@ export default $config({
     return {
       name: 'gaming',
       removal: input?.stage === 'production' ? 'retain' : 'remove',
-      protect: ['production', 'dev'].includes(input?.stage),
+      protect: ['production'].includes(input?.stage),
       home: 'local',
       providers: { railway: '0.4.4' },
     };
@@ -23,6 +23,7 @@ export default $config({
     );
 
     const env = new railway.Environment($app.stage, {
+      name: $app.stage,
       projectId: project.id,
     });
 
@@ -35,7 +36,7 @@ export default $config({
     const webapp = new railway.Service('WebApp', {
       projectId: project.id,
       region: 'us-east4-eqdc4a',
-      sourceRepo: 'git@github.com:fveracoechea/gaming.git',
+      sourceRepo: 'https://github.com/fveracoechea/gaming.git',
       sourceRepoBranch: 'main',
       rootDirectory: 'apps/web',
     });
