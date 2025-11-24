@@ -104,7 +104,7 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
 
   return (
     <AuthLayoutTemplate image={image}>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-xs md:max-w-sm">
         <Outlet />
       </div>
     </AuthLayoutTemplate>

@@ -37,7 +37,6 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 export default function SignIn({ actionData }: Route.ComponentProps) {
   const { formErrors, fieldErrors } = actionData || {};
-  throw new Error('t3est');
   return (
     <Form noValidate method="POST" className={cn('flex flex-col gap-6')}>
       <FieldGroup>
