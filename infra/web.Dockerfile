@@ -9,6 +9,7 @@ COPY tsconfig.json tsconfig.base.json ./
 
 # Copy all package.json files to install dependencies
 COPY apps/web/package.json ./apps/web/
+COPY packages/api/package.json ./packages/api/
 COPY packages/auth/package.json ./packages/auth/
 COPY packages/db/package.json ./packages/db/
 COPY packages/ui/package.json ./packages/ui/
@@ -21,13 +22,12 @@ RUN bun install --frozen-lockfile
 FROM oven/bun:1.3 AS builder
 WORKDIR /app
 
-# Copy everything from dependencies stage (includes all node_modules)
+# Copy everything from dependencies stage (includes all node_modules and config files)
 COPY --from=dependencies /app ./
 
 # Copy all source code (needed for workspace dependencies)
 COPY apps/web ./apps/web
 COPY packages ./packages
-COPY turbo.json ./
 
 # Build the web app
 RUN bun run web:build
