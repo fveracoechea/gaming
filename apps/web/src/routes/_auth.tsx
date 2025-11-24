@@ -22,9 +22,7 @@ function AuthLayoutTemplate(props: PropsWithChildren<{ image: string }>) {
             <span className="text-xl font-bold">BattleStage</span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">{children}</div>
-        </div>
+        <div className="flex flex-1 items-center justify-center">{children}</div>
       </div>
       <div className="relative hidden bg-muted lg:block">
         <img
@@ -72,27 +70,25 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   return (
     <AuthLayoutTemplate image="/error-page.jpg">
-      <section className="mx-auto flex flex-1 items-center pb-10">
-        <div className="flex flex-col items-center gap-4">
-          <TriangleAlert className="stroke-destructive h-24 w-24" />
-          <div className="flex max-w-screen-md flex-col justify-center gap-0 text-center">
-            <Typography.Large>{headline}</Typography.Large>
-            <Typography.Muted>{message}</Typography.Muted>
-          </div>
-          <Button asChild>
-            <Link to="/" replace>
-              Go to Homepage
-            </Link>
-          </Button>
-
-          {stack && (
-            <div className="border-border max-w-full rounded-md border p-2 text-sm">
-              <pre className="max-w-screen-xl overflow-x-auto p-4">
-                <code>{stack}</code>
-              </pre>
-            </div>
-          )}
+      <section className="w-full max-w-2xl flex flex-col items-center gap-4">
+        <TriangleAlert className="stroke-destructive h-24 w-24" />
+        <div className="flex max-w-screen-md flex-col justify-center gap-0 text-center">
+          <Typography.Large>{headline}</Typography.Large>
+          <Typography.Muted>{message}</Typography.Muted>
         </div>
+        <Button asChild>
+          <Link to="/" replace>
+            Go to Homepage
+          </Link>
+        </Button>
+
+        {stack && (
+          <div className="border-border max-w-full rounded-md border p-2 text-xs">
+            <pre className="max-w-full overflow-x-auto p-4">
+              <code>{stack}</code>
+            </pre>
+          </div>
+        )}
       </section>
     </AuthLayoutTemplate>
   );
@@ -108,7 +104,7 @@ export default function AuthLayout({ matches }: Route.ComponentProps) {
 
   return (
     <AuthLayoutTemplate image={image}>
-      <div className="w-full max-w-xs">
+      <div className="w-full max-w-sm">
         <Outlet />
       </div>
     </AuthLayoutTemplate>
