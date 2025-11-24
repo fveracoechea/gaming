@@ -21,9 +21,13 @@ import type { Route } from './+types/root';
 import stylesheet from './main.css?url';
 
 export function loader() {
-  console.log('Root loader', env);
-  return null;
+  return {
+    stage: env.STAGE,
+    appURL: env.VITE_APP_URL,
+  };
 }
+
+export type RootLoaderData = ReturnType<typeof loader>;
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
