@@ -1,11 +1,33 @@
+import type { Context } from '@/context';
 import { db } from '@gaming/db';
 import { schema } from '@gaming/db';
 import { CreateOrUpdateTeamSchema } from '@gaming/zod';
 import { ORPCError } from '@orpc/client';
+import { os } from '@orpc/server';
 import { and, eq } from 'drizzle-orm';
 import z from 'zod';
 
 import { procedures as p } from '../procedure';
+
+/**
+ * Middleware to check if the current user is a captain of the specified team.
+ */
+const isCaptainMiddleware = os
+  .$context<{ auth: NonNullable<Context['auth']> }>()
+  .middleware(async ({ context, next }, input: { teamId: string }) => {
+    const { auth } = context;
+
+    const isCaptain = !!(await db.query.teamMember.findFirst({
+      columns: { id: true },
+      where: and(
+        eq(schema.teamMember.userId, auth.user.id),
+        eq(schema.teamMember.teamId, input.teamId),
+        eq(schema.teamMember.role, 'CAPTAIN'),
+      ),
+    }));
+
+    return next({ context: { auth, isCaptain } });
+  });
 
 /**
  * See a team by ID along with its members.
@@ -68,8 +90,12 @@ export const create = p.protected
     });
   });
 
+/**
+ * Edit team details. Only captains can edit team details.
+ */
 export const edit = p.protected
   .input(z.object({ teamId: z.uuid(), update: CreateOrUpdateTeamSchema }))
+  .use(isCaptainMiddleware)
   .errors({
     NOT_FOUND: {
       message: 'Team not found',
@@ -78,25 +104,13 @@ export const edit = p.protected
       message: 'Only team captains can edit team details',
     },
   })
-  .handler(async ({ errors, input: { teamId, update }, context }) => {
-    const { user } = context.auth;
-
+  .handler(async ({ errors, input: { teamId, update }, context: { isCaptain } }) => {
     const doesTeamExist = !!(await db.query.team.findFirst({
       columns: { id: true },
       where: eq(schema.team.id, teamId),
     }));
 
     if (!doesTeamExist) throw errors.NOT_FOUND();
-
-    const isCaptain = !!(await db.query.teamMember.findFirst({
-      columns: { id: true },
-      where: and(
-        eq(schema.teamMember.userId, user.id),
-        eq(schema.teamMember.teamId, teamId),
-        eq(schema.teamMember.role, 'CAPTAIN'),
-      ),
-    }));
-
     if (!isCaptain) throw errors.FORBIDDEN();
 
     const [team] = await db
@@ -108,8 +122,12 @@ export const edit = p.protected
     return team!;
   });
 
+/**
+ * Delete a team by ID. Only captains can delete the team.
+ */
 export const deleteById = p.protected
   .input(z.object({ teamId: z.uuid() }))
+  .use(isCaptainMiddleware)
   .errors({
     NOT_FOUND: {
       message: 'Team not found',
@@ -118,25 +136,13 @@ export const deleteById = p.protected
       message: 'Only team captain can delete the team',
     },
   })
-  .handler(async ({ input: { teamId }, context, errors }) => {
-    const { user } = context.auth;
-
+  .handler(async ({ input: { teamId }, context: { isCaptain }, errors }) => {
     const team = await db.query.team.findFirst({
       columns: { id: true, name: true },
       where: eq(schema.team.id, teamId),
     });
 
     if (!team) throw errors.NOT_FOUND();
-
-    const isCaptain = !!(await db.query.teamMember.findFirst({
-      columns: { id: true },
-      where: and(
-        eq(schema.teamMember.userId, user.id),
-        eq(schema.teamMember.teamId, teamId),
-        eq(schema.teamMember.role, 'CAPTAIN'),
-      ),
-    }));
-
     if (!isCaptain) throw errors.FORBIDDEN();
 
     await db.delete(schema.team).where(eq(schema.team.id, teamId));
