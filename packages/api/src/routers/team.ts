@@ -107,3 +107,38 @@ export const edit = p.protected
 
     return team!;
   });
+
+export const deleteById = p.protected
+  .input(z.object({ teamId: z.uuid() }))
+  .errors({
+    NOT_FOUND: {
+      message: 'Team not found',
+    },
+    FORBIDDEN: {
+      message: 'Only team captain can delete the team',
+    },
+  })
+  .handler(async ({ input: { teamId }, context, errors }) => {
+    const { user } = context.auth;
+
+    const team = await db.query.team.findFirst({
+      columns: { id: true, name: true },
+      where: eq(schema.team.id, teamId),
+    });
+
+    if (!team) throw errors.NOT_FOUND();
+
+    const isCaptain = !!(await db.query.teamMember.findFirst({
+      columns: { id: true },
+      where: and(
+        eq(schema.teamMember.userId, user.id),
+        eq(schema.teamMember.teamId, teamId),
+        eq(schema.teamMember.role, 'CAPTAIN'),
+      ),
+    }));
+
+    if (!isCaptain) throw errors.FORBIDDEN();
+
+    await db.delete(schema.team).where(eq(schema.team.id, teamId));
+    return { message: `Team ${team.name} has been deleted` };
+  });
