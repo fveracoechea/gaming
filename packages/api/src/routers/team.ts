@@ -52,7 +52,7 @@ export const create = p.protected
       eq(schema.teamMember.userId, user.id),
     );
 
-    if (teamCount > 1) throw errors.FORBIDDEN();
+    if (teamCount >= 1) throw errors.FORBIDDEN();
 
     return await db.transaction(async tx => {
       const [team] = await tx.insert(schema.team).values(input).returning();

@@ -3,8 +3,7 @@
  * Uses modular seed functions to populate development/test data.
  * Supports: --force to truncate & reseed, configurable counts via --users=, --teams=, --tournaments=
  */
-import 'dotenv/config';
-
+import dotenv from 'dotenv';
 import { sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
@@ -17,6 +16,13 @@ import { seedMatches } from './seed-matches';
 import { seedTeams } from './seed-teams';
 import { seedTournaments } from './seed-tournaments';
 import { seedUsers } from './seed-users';
+
+let stage = 'local';
+if (process.env.STAGE) stage = process.env.STAGE;
+
+dotenv.config({
+  path: '../../infra/.env.' + stage,
+});
 
 const DEFAULT_COUNTS = {
   users: 40,
