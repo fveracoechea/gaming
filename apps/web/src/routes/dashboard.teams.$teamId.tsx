@@ -1,6 +1,7 @@
 import { getORPCClient } from '@/lib/middlewares.server';
 import { DeleteTeamDialog } from '@/resources/team.delete.$teamId';
 import { TeamEditForm } from '@/resources/team.edit.$teamId';
+import { InvitePlayersToTeamDialog } from '@/resources/team.invite.$teamId';
 import { getTeamPlaceholderImage } from '@/utils/team';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
@@ -80,9 +81,8 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
           ))}
         </CardContent>
         <CardFooter className="justify-end gap-4">
-          <Button size="sm" variant="outline">
-            <span>Invite Players</span>
-          </Button>
+          <InvitePlayersToTeamDialog team={team} />
+
           <Button size="sm" variant="outline">
             <span>Find Tournaments</span>
           </Button>

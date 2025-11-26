@@ -1,5 +1,6 @@
 export * from './match';
 export * from './payment';
+export * from './player';
 export * from './payout';
 export * from './tournaments';
 export * from './team';

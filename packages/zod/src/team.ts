@@ -43,6 +43,7 @@ export const DeleteTeamSchema = z.object({
 });
 
 export const InvitePlayersToTeamSchema = z.object({
+  teamId: z.uuid(),
   players: z
     .array(
       z.object({

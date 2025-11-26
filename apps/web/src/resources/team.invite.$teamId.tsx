@@ -14,14 +14,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@gaming/ui/components/dialog';
-import { Field, FieldError, FieldGroup } from '@gaming/ui/components/field';
-import { Input } from '@gaming/ui/components/input';
+import { Field, FieldGroup } from '@gaming/ui/components/field';
 import { toast } from '@gaming/ui/components/sonner';
 import { Spinner } from '@gaming/ui/components/spinner';
-import { InvitePlayersToTeamSchema } from '@gaming/zod';
+import { InvitePlayersToTeamSchema, SearchPlayersSchema } from '@gaming/zod';
 import { isDefinedError, safe } from '@orpc/server';
 
 import type { Route } from './+types/team.invite.$teamId';
+import { PlayerSearchCombobox } from './player.search.combobox';
 
 const validator = createValidator(InvitePlayersToTeamSchema);
 
@@ -56,7 +56,8 @@ type Props = {
 
 export function InvitePlayersToTeamDialog({ team }: Props) {
   const [open, setOpen] = useState(false);
-  const fetcher = useFetcher();
+  const invite = useFetcher();
+  const players = useFetcher();
 
   const {
     reset,
@@ -64,13 +65,13 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm({
-    errors: fetcher.data,
+    errors: invite.data,
     resolver: validator.resolver,
     defaultValues: { teamId: team.id },
   });
 
   const onSubmit = handleSubmit(async fields => {
-    await fetcher.submit(fields, {
+    await invite.submit(fields, {
       method: 'post',
       encType: 'application/json',
       action: href('/resource/team/invite/:teamId', { teamId: team.id }),
@@ -86,39 +87,31 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete Team</Button>
+        <Button variant="outline">Invite Players</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invite Players</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>
+            Invite players to join the team by selecting them from the list below.
+          </DialogDescription>
         </DialogHeader>
         <div>
           <form noValidate method="post" onSubmit={onSubmit}>
             <FieldGroup>
-              <Field data-invalid={!!errors?.comfirm}>
-                <Input
-                  id="confirm"
-                  required
-                  aria-invalid={!!errors?.comfirm}
-                  autoComplete="off"
-                  {...register('')}
-                />
-                {errors?.comfirm && <FieldError errors={[errors?.comfirm]} />}
-              </Field>
-
+              <PlayerSearchCombobox />
               <Field orientation="horizontal" className="justify-end">
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
-                {fetcher.state === 'idle' ? (
-                  <Button type="submit" variant="destructive" disabled={!isDirty}>
-                    Delete
+                {invite.state === 'idle' ? (
+                  <Button type="submit" disabled={!isDirty}>
+                    Send Invite
                   </Button>
                 ) : (
-                  <Button disabled variant="destructive">
+                  <Button disabled>
                     <Spinner />
-                    <span>Deleting...</span>
+                    <span>Sending...</span>
                   </Button>
                 )}
               </Field>
