@@ -1,4 +1,5 @@
 import { getORPCClient } from '@/lib/middlewares.server';
+import { DeleteTeamDialog } from '@/resources/team.delete.$teamId';
 import { TeamEditForm } from '@/resources/team.edit.$teamId';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
@@ -90,8 +91,8 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
         </CardContent>
       </Card>
 
-      <Card className="border-dashed border-destructive/50 bg-transparent px-0 py-4">
-        <CardHeader>
+      <Card className="border-dashed border-destructive bg-transparent px-0 py-4 flex-row">
+        <CardHeader className="flex-1">
           <CardTitle className="text-xs font-semibold text-destructive uppercase">
             Danger Zone
           </CardTitle>
@@ -99,6 +100,9 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
             Delete this team and all associated data. This action cannot be undone.
           </CardDescription>
         </CardHeader>
+        <CardContent className="flex items-center">
+          <DeleteTeamDialog team={team} />
+        </CardContent>
       </Card>
     </div>
   );

@@ -45,3 +45,10 @@ export const CreateOrUpdateTeamSchema = z
     ...data,
     logoUrl: data.logoUrl ?? `https://placehold.co/64x64?text=${getTeamInitials(data.name)}`,
   }));
+
+export const DeleteTeamSchema = z.object({
+  teamId: z.uuid(),
+  comfirm: z.literal('I confirm that I want to delete this team', {
+    error: 'Confirmation required to delete the team',
+  }),
+});

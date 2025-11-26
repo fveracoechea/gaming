@@ -10,9 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@gaming/ui/components/card';
+import { H1, Typography } from '@gaming/ui/components/typography';
 import { getInitials } from '@gaming/ui/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, TrophyIcon } from 'lucide-react';
 
 import type { Route } from './+types/dashboard.my-teams';
 
@@ -30,10 +31,10 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
       {/* Header */}
       <div className="flex items-center justify-between gap-6">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold">My Teams</h1>
-          <p className="text-sm text-muted-foreground">
+          <H1 className="text-3xl font-bold">My Teams</H1>
+          <Typography variant="muted">
             Overview of your squad, members, and tournament activity.
-          </p>
+          </Typography>
         </div>
         <Button asChild>
           <Link to={href('/dashboard/create-team')}>
@@ -53,6 +54,14 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
           </CardDescription>
         </CardHeader>
       </Card>
+
+      {teams.length === 0 && (
+        <div className="flex flex-col justify-center items-center p-6 gap-2">
+          <TrophyIcon className="h-24 w-24 stroke-muted" />
+          <Typography variant="muted">No teams found.</Typography>
+          <Typography variant="base">Start by creating a team or join one!</Typography>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 @6xl:grid-cols-2">
         {teams.map(team => {
