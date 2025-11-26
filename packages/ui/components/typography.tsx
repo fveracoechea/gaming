@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 
-type CustomTypographyProps<T extends ElementType> = React.ComponentProps<T> & {
+type BaseTypographyProps<T extends ElementType> = React.ComponentProps<T> & {
   asChild?: boolean;
 };
 
 function createTypography<T extends ElementType>(args: { element: T; className: string }) {
-  return function TypographyComponent(props: CustomTypographyProps<T>) {
+  return function TypographyComponent(props: BaseTypographyProps<T>) {
     const { asChild = false, className, ...otherProps } = props;
     const Comp = asChild ? Slot : args.element;
     return <Comp {...otherProps} className={cn(args.className, className)} />;
@@ -53,7 +53,8 @@ const typographyVariants = cva('', {
       large: 'text-xl font-normal leading-loose',
       base: 'text-base font-normal leading-normal',
       small: 'text-sm font-normal leading-tight',
-      muted: 'text-sm text-muted-foreground',
+      muted: 'text-sm font-medium text-muted-foreground',
+      caption: 'text-xs font-semibold uppercase',
     },
     defaultVariants: {
       variant: 'base',
@@ -61,7 +62,7 @@ const typographyVariants = cva('', {
   },
 });
 
-export type TypographyProps = CustomTypographyProps<'span'> &
+export type TypographyProps = BaseTypographyProps<'span'> &
   VariantProps<typeof typographyVariants>;
 
 export function Typography(props: TypographyProps) {

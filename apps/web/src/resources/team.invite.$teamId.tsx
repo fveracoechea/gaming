@@ -14,17 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@gaming/ui/components/dialog';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@gaming/ui/components/field';
+import { Field, FieldError, FieldGroup } from '@gaming/ui/components/field';
 import { Input } from '@gaming/ui/components/input';
 import { toast } from '@gaming/ui/components/sonner';
 import { Spinner } from '@gaming/ui/components/spinner';
-import { Typography } from '@gaming/ui/components/typography';
-import { DeleteTeamSchema } from '@gaming/zod';
+import { InvitePlayersToTeamSchema } from '@gaming/zod';
 import { isDefinedError, safe } from '@orpc/server';
 
-import type { Route } from './+types/team.delete.$teamId';
+import type { Route } from './+types/team.invite.$teamId';
 
-const validator = createValidator(DeleteTeamSchema);
+const validator = createValidator(InvitePlayersToTeamSchema);
 
 export async function action({ context, request, params: { teamId } }: Route.ActionArgs) {
   const rpc = getORPCClient(context);
@@ -55,7 +54,7 @@ type Props = {
   };
 };
 
-export function DeleteTeamDialog({ team }: Props) {
+export function InvitePlayersToTeamDialog({ team }: Props) {
   const [open, setOpen] = useState(false);
   const fetcher = useFetcher();
 
@@ -74,7 +73,7 @@ export function DeleteTeamDialog({ team }: Props) {
     await fetcher.submit(fields, {
       method: 'post',
       encType: 'application/json',
-      action: href('/resource/team/delete/:teamId', { teamId: team.id }),
+      action: href('/resource/team/invite/:teamId', { teamId: team.id }),
     });
   });
 
@@ -91,24 +90,19 @@ export function DeleteTeamDialog({ team }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Team</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete the team <b>{team.name}</b>?
-          </DialogDescription>
+          <DialogTitle>Invite Players</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div>
           <form noValidate method="post" onSubmit={onSubmit}>
             <FieldGroup>
               <Field data-invalid={!!errors?.comfirm}>
-                <Typography variant="small">
-                  Type <b>I confirm that I want to delete this team</b> to confirm
-                </Typography>
                 <Input
                   id="confirm"
                   required
                   aria-invalid={!!errors?.comfirm}
                   autoComplete="off"
-                  {...register('comfirm')}
+                  {...register('')}
                 />
                 {errors?.comfirm && <FieldError errors={[errors?.comfirm]} />}
               </Field>

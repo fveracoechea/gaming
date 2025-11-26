@@ -1,6 +1,7 @@
 import { getORPCClient } from '@/lib/middlewares.server';
 import { DeleteTeamDialog } from '@/resources/team.delete.$teamId';
 import { TeamEditForm } from '@/resources/team.edit.$teamId';
+import { getTeamPlaceholderImage } from '@/utils/team';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
 import {
@@ -27,11 +28,20 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
   const { team } = loaderData;
   return (
     <div className="@container space-y-6 p-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold">{team?.name}</h1>
-        <p className="text-sm text-muted-foreground">
-          {team?.description || 'No description provided.'}
-        </p>
+      <header className="flex items-center gap-4">
+        <img
+          height={72}
+          width={72}
+          alt={team.name}
+          className="h-18 w-18 rounded-md border bg-muted object-cover"
+          src={team.logoUrl || getTeamPlaceholderImage(team.name)}
+        />
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold">{team?.name}</h1>
+          <p className="text-sm text-muted-foreground">
+            {team?.description || 'No description provided.'}
+          </p>
+        </div>
       </header>
 
       <Card>
@@ -71,10 +81,13 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
         </CardContent>
         <CardFooter className="justify-end gap-4">
           <Button size="sm" variant="outline">
-            <span>Invite Member</span>
+            <span>Invite Players</span>
+          </Button>
+          <Button size="sm" variant="outline">
+            <span>Find Tournaments</span>
           </Button>
           <Button size="sm">
-            <span>Find Tournaments</span>
+            <span>Start a Tournament</span>
           </Button>
         </CardFooter>
       </Card>

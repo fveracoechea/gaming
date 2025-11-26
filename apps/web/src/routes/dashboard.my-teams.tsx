@@ -1,6 +1,7 @@
 import { Link, href } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
+import { getTeamPlaceholderImage } from '@/utils/team';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
 import {
@@ -71,12 +72,11 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
                 <CardHeader className="flex flex-row items-start justify-between space-y-0">
                   <div className="flex items-center gap-4">
                     <img
+                      height={48}
+                      width={48}
                       alt={team.name}
-                      className="h-16 w-16 rounded-md border bg-muted object-cover"
-                      src={
-                        team.logoUrl ||
-                        `https://placehold.co/64x64?text=${team.name.charAt(0).toUpperCase()}`
-                      }
+                      className="h-12 w-12 rounded-md border bg-muted object-cover"
+                      src={team.logoUrl || getTeamPlaceholderImage(team.name)}
                     />
                     <div className="space-y-1">
                       <CardTitle className="transition-colors group-hover:text-primary">

@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@gaming/ui/components/card';
+import { H1, Typography } from '@gaming/ui/components/typography';
 
 const mockUserStats = {
   totalEarnings: 2450.75,
@@ -80,17 +81,19 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <H1 className="text-3xl font-bold">Dashboard</H1>
+        <Typography variant="muted">
           Welcome back! Here's your gaming performance overview.
-        </p>
+        </Typography>
       </div>
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Total Earnings</CardTitle>
+        <Card className="py-4">
+          <CardHeader>
+            <CardTitle>
+              <Typography variant="muted">Total Earnings</Typography>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
@@ -100,9 +103,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Tournaments</CardTitle>
+        <Card className="py-4">
+          <CardHeader>
+            <CardTitle>
+              <Typography variant="muted">Tournaments</Typography>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockUserStats.tournamentsPlayed}</div>
@@ -117,9 +122,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Team Win Rate</CardTitle>
+        <Card className="py-4">
+          <CardHeader>
+            <CardTitle>
+              <Typography variant="muted">Team Win Rate</Typography>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockUserStats.teamWinRate}%</div>
@@ -127,9 +134,11 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Current Rank</CardTitle>
+        <Card className="py-4">
+          <CardHeader>
+            <CardTitle>
+              <Typography variant="muted">Current Rank</Typography>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockUserStats.currentRank}</div>
@@ -191,9 +200,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span>{match.hero}</span>
-                    <span>•</span>
                     <span>{match.duration}</span>
-                    <span>•</span>
                     <span>{match.date}</span>
                   </div>
                 </div>

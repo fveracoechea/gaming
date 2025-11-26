@@ -87,7 +87,7 @@ export function TeamEditForm({ team }: Props) {
           <FieldLabel htmlFor="team-logo">Logo URL</FieldLabel>
           <Input
             id="team-logo"
-            placeholder="External image link (64x64 recommended)."
+            placeholder="External image link (180x180 recommended)."
             aria-invalid={!!errors?.logoUrl}
             {...register('logoUrl')}
           />

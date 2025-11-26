@@ -73,8 +73,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       <section className="w-full max-w-2xl flex flex-col items-center gap-4">
         <TriangleAlert className="stroke-destructive h-24 w-24" />
         <div className="flex max-w-screen-md flex-col justify-center gap-0 text-center">
-          <Typography.Large>{headline}</Typography.Large>
-          <Typography.Muted>{message}</Typography.Muted>
+          <Typography variant="large">{headline}</Typography>
+          <Typography variant="small">{message}</Typography>
         </div>
         <Button asChild>
           <Link to="/" replace>
