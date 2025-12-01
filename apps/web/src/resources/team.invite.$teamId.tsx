@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { href, redirect, useFetcher } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
 import { createValidator } from '@/lib/validator';
+import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
 import {
   Dialog,
@@ -17,11 +17,13 @@ import {
 import { Field, FieldGroup } from '@gaming/ui/components/field';
 import { toast } from '@gaming/ui/components/sonner';
 import { Spinner } from '@gaming/ui/components/spinner';
-import { InvitePlayersToTeamSchema, SearchPlayersSchema } from '@gaming/zod';
+import { getInitials } from '@gaming/ui/lib/utils';
+import { InvitePlayersToTeamSchema } from '@gaming/zod';
 import { isDefinedError, safe } from '@orpc/server';
+import { TrashIcon } from 'lucide-react';
 
 import type { Route } from './+types/team.invite.$teamId';
-import { PlayerSearchCombobox, type PlayerSearchData } from './player.search.combobox';
+import { PlayerSearchCombobox } from './player.search.combobox';
 
 const validator = createValidator(InvitePlayersToTeamSchema);
 
@@ -55,12 +57,11 @@ type Props = {
 };
 
 export function InvitePlayersToTeamDialog({ team }: Props) {
-  const [open, setOpen] = useState(false);
   const invite = useFetcher();
-  const [players, setPlayers] = useState<PlayerSearchData[]>([]);
 
   const {
     reset,
+    control,
     register,
     handleSubmit,
     formState: { errors, isDirty },
@@ -78,14 +79,10 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
     });
   });
 
+  const players = useFieldArray({ control, name: 'players' });
+
   return (
-    <Dialog
-      open={open}
-      onOpenChange={value => {
-        if (!value) reset();
-        setOpen(value);
-      }}
-    >
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">Invite Players</Button>
       </DialogTrigger>
@@ -100,21 +97,43 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
           <form noValidate method="post" onSubmit={onSubmit}>
             <FieldGroup>
               <PlayerSearchCombobox
-                selectedPlayersIds={players.map(p => p.id)}
+                selectedPlayersIds={players.fields.map(p => p.id)}
                 onSelectPlayer={newPlayer => {
-                  if (players.find(p => p.id === newPlayer.id)) return;
-                  setPlayers([...players, newPlayer]);
+                  if (players.fields.find(p => p.id === newPlayer.id)) return;
+                  players.append({ id: newPlayer.id, name: newPlayer.name, role: 'MEMBER' });
                 }}
               />
-              <Field>
-                {players.map(player => (
-                  <div key={player.id} className="flex flex-col gap-2">
-                    <span>{player.name}</span>
+              <Field className="h-60 overflow-y-auto">
+                {players.fields.map((player, idx) => (
+                  <div
+                    key={player.id}
+                    className="flex items-center justify-between px-4  py-2 even:bg-muted/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-sm font-medium">
+                        {getInitials(player.name)}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm leading-none font-medium">{player.name}</p>
+                        <span className="text-xs text-muted-foreground">LOREM IPSUM</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Badge variant="outline">{player.role}</Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label="Remove Member"
+                        onClick={() => players.remove(idx)}
+                      >
+                        <TrashIcon />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </Field>
               <Field orientation="horizontal" className="justify-end">
-                <DialogClose asChild>
+                <DialogClose asChild onClick={() => reset({ players: [] })}>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
                 {invite.state === 'idle' ? (

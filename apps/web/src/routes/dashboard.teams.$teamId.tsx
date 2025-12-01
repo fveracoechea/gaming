@@ -28,7 +28,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 export default function TeamDetails({ loaderData }: Route.ComponentProps) {
   const { team } = loaderData;
   return (
-    <div className="@container space-y-6 p-6">
+    <div className="@container space-y-6">
       <header className="flex items-center gap-4">
         <img
           height={72}
@@ -59,7 +59,7 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
               className="flex items-center justify-between px-4  py-2 even:bg-muted/50"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-xs font-medium">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-sm font-medium">
                   {getInitials(member.user.name)}
                 </div>
                 <div className="flex flex-col gap-1">

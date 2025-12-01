@@ -28,7 +28,7 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
   const { teams } = loaderData;
 
   return (
-    <div className="@container space-y-6 p-6">
+    <div className="@container space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-6">
         <div className="flex flex-col gap-1">

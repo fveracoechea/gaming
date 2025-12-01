@@ -47,8 +47,9 @@ export const InvitePlayersToTeamSchema = z.object({
   players: z
     .array(
       z.object({
-        userId: z.uuid(),
-        memberRole: TeamMemberRoleEnum.extract(['CAPTAIN']),
+        id: z.uuid(),
+        name: z.string(),
+        role: TeamMemberRoleEnum.extract(['COACH', 'MEMBER']),
       }),
     )
     .min(1, 'At least one player must be selected')

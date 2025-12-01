@@ -48,7 +48,7 @@ export default function DashboarLayout() {
           </Breadcrumb>
         </header>
 
-        <main className="flex-1 h-full overflow-auto p-6">
+        <main className="w-full h-full mx-auto overflow-auto p-6 max-w-7xl">
           <Outlet />
         </main>
       </SidebarInset>

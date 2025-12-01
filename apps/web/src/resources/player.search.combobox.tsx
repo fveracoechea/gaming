@@ -47,7 +47,7 @@ export function PlayerSearchCombobox(props: Props) {
   const { players } = fetcher.data || { players: [] };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
