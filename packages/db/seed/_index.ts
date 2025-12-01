@@ -12,7 +12,9 @@ import * as schema from '../src/db-schema';
 import { tournament } from '../src/db-schema';
 import { seedFinance } from './seed-finance';
 import { seedGames } from './seed-games';
+import { seedInboxMessages } from './seed-inbox';
 import { seedMatches } from './seed-matches';
+import { seedPlayerProfiles } from './seed-player-profiles';
 import { seedTeams } from './seed-teams';
 import { seedTournaments } from './seed-tournaments';
 import { seedUsers } from './seed-users';
@@ -75,7 +77,7 @@ async function main() {
   if (force) {
     console.log('Forced reseed requested -- truncating tables...');
     await db.execute(
-      sql`TRUNCATE TABLE match_team_participant, match_participant, match, payment, payout, tournament_team_participant, tournament_participant, tournament_invite, team_member, team, tournament, game RESTART IDENTITY CASCADE`,
+      sql`TRUNCATE TABLE inbox, match_team_participant, match_participant, match, payment, payout, tournament_team_participant, tournament_participant, tournament_invite, team_member, team, player_profile, tournament, game RESTART IDENTITY CASCADE`,
     );
     console.log('Truncate complete.');
   }
@@ -84,6 +86,10 @@ async function main() {
 
   // Order matters due to foreign keys
   const { users } = await seedUsers(db, counts.users);
+  const { playerProfiles } = await seedPlayerProfiles(
+    db,
+    users.map(u => u.id),
+  );
   const { games } = await seedGames(db);
   const { teams, teamMembers } = await seedTeams(db, users, counts.teams);
   const { tournaments, userParticipants, teamParticipants } = await seedTournaments(
@@ -103,6 +109,11 @@ async function main() {
     tournaments.map(t => ({ id: t.id, organizerId: t.organizerId })),
     userParticipants.map(p => ({ id: p.id!, tournamentId: p.tournamentId })),
   );
+  const { inboxMessages } = await seedInboxMessages(db, {
+    users: users.map(u => ({ id: u.id, name: u.name, image: u.image })),
+    teams: teams.map(t => ({ id: t.id, name: t.name, logoUrl: t.logoUrl })),
+    tournaments: tournaments.map(t => ({ id: t.id, title: t.title })),
+  });
 
   const durationMs = Date.now() - startTime;
   console.log('Seeding complete.');
@@ -110,6 +121,7 @@ async function main() {
   const summary = {
     counts,
     users: users.length,
+    playerProfiles: playerProfiles.length,
     games: games.length,
     teams: teams.length,
     teamMembers: teamMembers.length,
@@ -121,6 +133,7 @@ async function main() {
     matchTeamParticipants: matchTeamParticipants.length,
     payments: payments.length,
     payouts: payouts.length,
+    inboxMessages: inboxMessages.length,
     forced: force,
     durationMs,
   };

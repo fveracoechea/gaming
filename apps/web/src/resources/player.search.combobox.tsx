@@ -73,26 +73,26 @@ export function PlayerSearchCombobox(props: Props) {
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {players.map(player => (
-                <CommandItem
-                  key={player.id}
-                  value={player.id}
-                  disabled={selectedPlayersIds.includes(player.id)}
-                  onSelect={() => {
-                    setSearch('');
-                    setOpen(false);
-                    onSelectPlayer(player);
-                  }}
-                >
-                  {player.name}
-                  <CheckIcon
-                    className={cn(
-                      'ml-auto',
-                      selectedPlayersIds.includes(player.id) ? 'opacity-100' : 'opacity-0',
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {players.map(player => {
+                const isSelected = selectedPlayersIds.includes(player.id);
+                return (
+                  <CommandItem
+                    key={player.id}
+                    value={player.id}
+                    disabled={isSelected}
+                    onSelect={() => {
+                      setSearch('');
+                      setOpen(false);
+                      onSelectPlayer(player);
+                    }}
+                  >
+                    {player.name}
+                    <CheckIcon
+                      className={cn('ml-auto', isSelected ? 'opacity-100' : 'opacity-0')}
+                    />
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </CommandList>
         </Command>

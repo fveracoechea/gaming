@@ -4,5 +4,6 @@ export * from './player';
 export * from './payout';
 export * from './tournaments';
 export * from './team';
+export * from './inbox';
 export * from './env';
 export * from './auth';

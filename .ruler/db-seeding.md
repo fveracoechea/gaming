@@ -22,6 +22,8 @@ Each domain table is defined in its own file under `schema/` and re-exported via
 
 - `auth.ts`: Users and auth-related entities.
 - `game.ts`: Supported games.
+- `inbox.ts`: Inbox messages for notifications (team invites, tournament results, etc.).
+- `player.ts`: Player profile information (linked to users).
 - `tournament.ts`: Tournaments + participants/invites.
 - `team.ts`: Teams, team members, team tournament participants, and match team participants.
 - `match.ts`: Matches and (user) match participants.
@@ -43,6 +45,9 @@ insert/update type safety while remaining string-based at the database level.
 ### Relationships & Constraints Highlights
 
 - `tournament_participant.userId` references `user.id` (cascade delete).
+- `inbox_message.userId` references `user.id` (cascade delete).
+- `player_profile.userId` references `user.id` with unique constraint (one profile per user,
+  cascade delete).
 - `team_member.userId` references `user.id` with uniqueness partial indexes enforcing only one
   `CAPTAIN` and one `COACH` per team.
 - `match_participant.matchId` & `match_team_participant.matchId` reference `match.id` (cascade
@@ -58,12 +63,14 @@ The entry point is `packages/db/seed/_index.ts` which:
    `TRUNCATE ... CASCADE` statement.
 3. Executes individual seed modules in dependency order:
    - `seed-users` → creates users.
+   - `seed-player-profiles` → creates player profiles for each user.
    - `seed-games` → inserts a fixed list of games.
    - `seed-teams` → creates teams + members referencing users.
    - `seed-tournaments` → creates tournaments referencing users & games; adds user and team
      participants.
    - `seed-matches` → generates matches + participant links within each tournament.
    - `seed-finance` → creates payments (user entry fees) and payouts (winner prizes).
+   - `seed-inbox` → generates notification messages for users (team invites, results, etc.).
 4. Prints a JSON summary of inserted counts and duration.
 
 ### Individual Seed Modules
@@ -75,15 +82,20 @@ schema-driven shapes.
 Module notes:
 
 - `seed-users`: Generates realistic profile fields and roles.
+- `seed-player-profiles`: Creates player profile for each user with stats (matches played,
+  tournaments won/played, description).
 - `seed-games`: Simple static set (Dota 2, Valorant, CS2) with generated IDs.
 - `seed-teams`: Random companies as team names; assigns member roles (`CAPTAIN`, optional
-  `COACH`, `MEMBER`).
+  `COACH`, `PLAYER`).
 - `seed-tournaments`: Random composition of game, region, format, status, type; builds user and
   team participant pools.
 - `seed-matches`: For each tournament, creates a variable number of matches with randomized
   status & participant pairings.
 - `seed-finance`: Random subset of user participants pay entry fees; random tournaments produce
   payouts to top participants.
+- `seed-inbox`: Generates 3-10 notification messages per user with various types (team invites,
+  team invite responses, role updates, team removal, tournament join requests, tournament
+  invites) with realistic JSONB data and read/unread status.
 
 ### Helper Utilities
 
@@ -151,4 +163,4 @@ seed modules following established patterns.
 
 ---
 
-_Last updated: 2025-10-30_
+_Last updated: 2025-12-01_

@@ -32,7 +32,7 @@ export async function seedTeams(db: DrizzleDB, users: { id: string }[], teamCoun
         ? 'CAPTAIN'
         : idx === 1 && faker.datatype.boolean()
           ? 'COACH'
-          : 'MEMBER') as 'CAPTAIN' | 'MEMBER' | 'COACH',
+          : 'PLAYER') as 'CAPTAIN' | 'PLAYER' | 'COACH',
       createdAt: randomPastDate(10),
       updatedAt: new Date(),
     }));

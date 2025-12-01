@@ -79,7 +79,7 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
     });
   });
 
-  const players = useFieldArray({ control, name: 'players' });
+  const players = useFieldArray({ control, name: 'players', keyName: 'customID' });
 
   return (
     <Dialog>
@@ -99,8 +99,7 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
               <PlayerSearchCombobox
                 selectedPlayersIds={players.fields.map(p => p.id)}
                 onSelectPlayer={newPlayer => {
-                  if (players.fields.find(p => p.id === newPlayer.id)) return;
-                  players.append({ id: newPlayer.id, name: newPlayer.name, role: 'MEMBER' });
+                  players.append({ id: newPlayer.id, name: newPlayer.name, role: 'PLAYER' });
                 }}
               />
               <Field className="h-60 overflow-y-auto">

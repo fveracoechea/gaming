@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Team membership roles including CAPTAIN designation
-export const TeamMemberRoleEnum = z.enum(['CAPTAIN', 'MEMBER', 'COACH']);
+export const TeamMemberRoleEnum = z.enum(['CAPTAIN', 'PLAYER', 'COACH']);
 
 export type TeamMemberRole = z.infer<typeof TeamMemberRoleEnum>;
 
@@ -49,7 +49,7 @@ export const InvitePlayersToTeamSchema = z.object({
       z.object({
         id: z.uuid(),
         name: z.string(),
-        role: TeamMemberRoleEnum.extract(['COACH', 'MEMBER']),
+        role: TeamMemberRoleEnum.extract(['COACH', 'PLAYER']),
       }),
     )
     .min(1, 'At least one player must be selected')
