@@ -21,7 +21,7 @@ import { InvitePlayersToTeamSchema, SearchPlayersSchema } from '@gaming/zod';
 import { isDefinedError, safe } from '@orpc/server';
 
 import type { Route } from './+types/team.invite.$teamId';
-import { PlayerSearchCombobox } from './player.search.combobox';
+import { PlayerSearchCombobox, type PlayerSearchData } from './player.search.combobox';
 
 const validator = createValidator(InvitePlayersToTeamSchema);
 
@@ -57,7 +57,7 @@ type Props = {
 export function InvitePlayersToTeamDialog({ team }: Props) {
   const [open, setOpen] = useState(false);
   const invite = useFetcher();
-  const players = useFetcher();
+  const [players, setPlayers] = useState<PlayerSearchData[]>([]);
 
   const {
     reset,
@@ -99,7 +99,20 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
         <div>
           <form noValidate method="post" onSubmit={onSubmit}>
             <FieldGroup>
-              <PlayerSearchCombobox />
+              <PlayerSearchCombobox
+                selectedPlayersIds={players.map(p => p.id)}
+                onSelectPlayer={newPlayer => {
+                  if (players.find(p => p.id === newPlayer.id)) return;
+                  setPlayers([...players, newPlayer]);
+                }}
+              />
+              <Field>
+                {players.map(player => (
+                  <div key={player.id} className="flex flex-col gap-2">
+                    <span>{player.name}</span>
+                  </div>
+                ))}
+              </Field>
               <Field orientation="horizontal" className="justify-end">
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>

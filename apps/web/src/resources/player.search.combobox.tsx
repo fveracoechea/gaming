@@ -19,12 +19,12 @@ import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 
 import type { Route } from './+types/player.search.combobox';
 
-type PlayerSearchData = Route.ComponentProps['loaderData'];
+export type PlayerSearchResult = Route.ComponentProps['loaderData'];
+export type PlayerSearchData = PlayerSearchResult['players'][number];
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const { searchParams } = new URL(request.url);
-  console.log('Search Params:', searchParams.toString());
   const rpc = getORPCClient(context);
+  const { searchParams } = new URL(request.url);
 
   const players = await rpc.player.search(
     parseURLSearchParams(SearchPlayersSchema, searchParams),
@@ -33,10 +33,16 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   return { players };
 }
 
-export function PlayerSearchCombobox() {
+type Props = {
+  selectedPlayersIds: string[];
+  onSelectPlayer: (player: PlayerSearchData) => void;
+};
+
+export function PlayerSearchCombobox(props: Props) {
+  const { onSelectPlayer, selectedPlayersIds } = props;
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const fetcher = useFetcher<PlayerSearchData>();
+  const fetcher = useFetcher<PlayerSearchResult>();
 
   const { players } = fetcher.data || { players: [] };
 
@@ -49,14 +55,14 @@ export function PlayerSearchCombobox() {
           aria-expanded={open}
           className=" justify-between"
         >
-          <span>Search for players</span>
+          <span>Select players</span>
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search framework..."
+            placeholder="Search for players..."
             className="h-9"
             value={search}
             onValueChange={v => {
@@ -71,16 +77,18 @@ export function PlayerSearchCombobox() {
                 <CommandItem
                   key={player.id}
                   value={player.id}
-                  onSelect={currentValue => {
-                    setSearch(currentValue === search ? '' : currentValue);
+                  disabled={selectedPlayersIds.includes(player.id)}
+                  onSelect={() => {
+                    setSearch('');
                     setOpen(false);
+                    onSelectPlayer(player);
                   }}
                 >
                   {player.name}
                   <CheckIcon
                     className={cn(
                       'ml-auto',
-                      search === player.id ? 'opacity-100' : 'opacity-0',
+                      selectedPlayersIds.includes(player.id) ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                 </CommandItem>
