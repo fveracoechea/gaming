@@ -1,4 +1,8 @@
-import type { TeamMemberRole, TeamTournamentParticipantStatus } from '@gaming/zod';
+import type {
+  TeamInviteStatus,
+  TeamMemberRole,
+  TeamTournamentParticipantStatus,
+} from '@gaming/zod';
 import { eq, relations, sql } from 'drizzle-orm';
 import * as t from 'drizzle-orm/pg-core';
 
@@ -66,6 +70,47 @@ export const teamMemberRelations = relations(teamMember, ({ one }) => ({
   user: one(user, {
     fields: [teamMember.userId],
     references: [user.id],
+  }),
+}));
+
+/**
+ * Team invites sent by captains to prospective players.
+ * Status tracks the lifecycle: PENDING -> ACCEPTED/REJECTED/WITHDRAWN
+ * Upon acceptance, a corresponding team_member record is created.
+ */
+export const teamInvite = t.pgTable('team_invite', {
+  id,
+  teamId: t
+    .uuid()
+    .notNull()
+    .references(() => team.id, { onDelete: 'cascade' }),
+  invitedUserId: t
+    .text()
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  invitedByUserId: t
+    .text()
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  role: t.varchar().$type<TeamMemberRole>().notNull().default('PLAYER'),
+  status: t.varchar().$type<TeamInviteStatus>().notNull().default('PENDING'),
+  ...timestamps,
+});
+
+export const teamInviteRelations = relations(teamInvite, ({ one }) => ({
+  team: one(team, {
+    fields: [teamInvite.teamId],
+    references: [team.id],
+  }),
+  invitedUser: one(user, {
+    fields: [teamInvite.invitedUserId],
+    references: [user.id],
+    relationName: 'invitedUser',
+  }),
+  invitedByUser: one(user, {
+    fields: [teamInvite.invitedByUserId],
+    references: [user.id],
+    relationName: 'invitedByUser',
   }),
 }));
 

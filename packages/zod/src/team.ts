@@ -5,6 +5,11 @@ export const TeamMemberRoleEnum = z.enum(['CAPTAIN', 'PLAYER', 'COACH']);
 
 export type TeamMemberRole = z.infer<typeof TeamMemberRoleEnum>;
 
+// Team invite status
+export const TeamInviteStatusEnum = z.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']);
+
+export type TeamInviteStatus = z.infer<typeof TeamInviteStatusEnum>;
+
 // Team participant status in a tournament (mirror TournamentParticipantStatus)
 export const TeamTournamentParticipantStatusEnum = z.enum([
   'REGISTERED',
@@ -54,4 +59,13 @@ export const InvitePlayersToTeamSchema = z.object({
     )
     .min(1, 'At least one player must be selected')
     .max(5, 'You can invite up to 5 players at a time'),
+});
+
+export const RespondToInviteSchema = z.object({
+  inviteId: z.uuid(),
+  action: z.enum(['accept', 'reject']),
+});
+
+export const WithdrawInviteSchema = z.object({
+  inviteId: z.uuid(),
 });
