@@ -3,6 +3,7 @@ import type { RouterClient } from '@orpc/server';
 import { sql } from 'drizzle-orm';
 
 import { procedures as p } from '../procedure';
+import * as inbox from './inbox';
 import * as player from './player';
 import * as team from './team';
 
@@ -20,6 +21,7 @@ async function healthCheck() {
 export const appRouter = {
   team,
   player,
+  inbox,
   healthCheck: p.public.handler(() => healthCheck()),
   whoami: p.protected.handler(({ context }) => context.auth),
 };

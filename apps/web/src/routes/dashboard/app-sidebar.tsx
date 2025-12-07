@@ -29,6 +29,10 @@ const data = {
           url: '/dashboard',
         },
         {
+          title: 'Inbox',
+          url: href('/dashboard/inbox'),
+        },
+        {
           title: 'My Profile',
           url: '/dashboard/my-profile',
         },

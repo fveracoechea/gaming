@@ -5,7 +5,7 @@ import { TeamMemberRoleEnum } from './team';
 const BaseDataSchema = z.object({
   id: z.uuid(),
   name: z.string(),
-  image: z.string().optional().or(z.url()),
+  image: z.string().optional().nullable().or(z.url()),
 });
 
 // Inbox message types enum
@@ -13,6 +13,7 @@ export const InboxMessageTypeEnum = z.enum([
   'TEAM_INVITE',
   'TEAM_INVITE_ACCEPTED',
   'TEAM_INVITE_REJECTED',
+  'TEAM_INVITE_WITHDRAWN',
   'TEAM_ROLE_UPDATE',
   'TEAM_REMOVED',
   'TOURNAMENT_RESULT',
@@ -50,6 +51,12 @@ const TeamInviteRejectedInboxSchema = z.object({
   }),
 });
 
+const TeamInviteWithdrawnInboxSchema = z.object({
+  type: z.literal('TEAM_INVITE_WITHDRAWN'),
+  team: BaseDataSchema,
+  withdrawnBy: BaseDataSchema,
+});
+
 const TeamRoleUpdateInboxSchema = z.object({
   type: z.literal('TEAM_ROLE_UPDATE'),
   team: BaseDataSchema,
@@ -80,6 +87,7 @@ export const InboxDataSchema = z.discriminatedUnion('type', [
   TeamInviteInboxSchema,
   TeamInviteAcceptedInboxSchema,
   TeamInviteRejectedInboxSchema,
+  TeamInviteWithdrawnInboxSchema,
   TeamRoleUpdateInboxSchema,
   TeamRemovedInboxSchema,
   TournamentJoinRequestInboxSchema,

@@ -1,3 +1,5 @@
+import { getORPCClient } from '@/lib/middlewares.server';
+import { RespondToInviteButton } from '@/resources/team.respond-invite.$inviteId';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
 import {
@@ -10,6 +12,16 @@ import {
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@gaming/ui/components/field';
 import { Input } from '@gaming/ui/components/input';
 import { Separator } from '@gaming/ui/components/separator';
+import { getInitials } from '@gaming/ui/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
+
+import type { Route } from './+types/dashboard.my-profile';
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const rpc = getORPCClient(context);
+  const invites = await rpc.team.listMyInvites();
+  return { invites };
+}
 
 // UI-only mock data for profile view
 const mockProfile = {
@@ -98,7 +110,9 @@ function statusVariant(status: string): 'default' | 'outline' | 'destructive' | 
   }
 }
 
-export default function MyProfilePage() {
+export default function MyProfilePage({ loaderData }: Route.ComponentProps) {
+  const { invites } = loaderData;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -108,6 +122,54 @@ export default function MyProfilePage() {
           Personal performance, teams, earnings, and integrations.
         </p>
       </div>
+
+      {/* Team Invites Section */}
+      {invites.length > 0 && (
+        <Card className="border-primary">
+          <CardHeader>
+            <CardTitle>Team Invites</CardTitle>
+            <CardDescription>You have {invites.length} pending team invite(s)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {invites.map(invite => (
+              <div
+                key={invite.id}
+                className="flex items-center justify-between px-4 py-2 even:bg-muted/50 rounded-lg"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-md border bg-muted text-sm font-medium">
+                    {invite.team.logoUrl ? (
+                      <img
+                        src={invite.team.logoUrl}
+                        alt={invite.team.name}
+                        className="h-full w-full rounded-md object-cover"
+                      />
+                    ) : (
+                      getInitials(invite.team.name)
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm leading-none font-medium">{invite.team.name}</p>
+                    <span className="text-xs text-muted-foreground">
+                      Invited by {invite.invitedByUser.name} •{' '}
+                      {formatDistanceToNow(invite.createdAt, { addSuffix: true })}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{invite.role}</Badge>
+                  <RespondToInviteButton inviteId={invite.id} action="accept" />
+                  <RespondToInviteButton
+                    inviteId={invite.id}
+                    action="reject"
+                    variant="outline"
+                  />
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Profile Overview */}
       <Card>

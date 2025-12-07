@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { href, redirect, useFetcher } from 'react-router';
+import { href, useFetcher } from 'react-router';
 
 import { getORPCClient } from '@/lib/middlewares.server';
 import { createValidator } from '@/lib/validator';
@@ -30,12 +31,12 @@ const validator = createValidator(InvitePlayersToTeamSchema);
 export async function action({ context, request, params: { teamId } }: Route.ActionArgs) {
   const rpc = getORPCClient(context);
 
-  const [fieldErrors] = await validator.validate(await request.json());
+  const [fieldErrors, formValues] = await validator.validate(await request.json());
   if (fieldErrors) return { fieldErrors };
 
-  const [error, data] = await safe(rpc.team.deleteById({ teamId }));
+  const [error, data] = await safe(rpc.team.sendInvites(formValues));
   if (isDefinedError(error)) return { error: error.message };
-  else if (error) return { error: 'Unable to delete team, an unexpected error occurred.' };
+  else if (error) return { error: 'Unable to send invites, an unexpected error occurred.' };
   return { success: data.message };
 }
 
@@ -45,7 +46,7 @@ export async function clientAction({ serverAction }: Route.ClientActionArgs) {
   if (result.fieldErrors) return result.fieldErrors;
   if (result.success) {
     toast.success(result.success);
-    return redirect(href('/dashboard/my-teams'));
+    return { success: true };
   }
 }
 
@@ -57,14 +58,17 @@ type Props = {
 };
 
 export function InvitePlayersToTeamDialog({ team }: Props) {
+  const [open, setOpen] = useState(false);
   const invite = useFetcher();
+
+  const inviteSccess = invite.data?.success;
 
   const {
     reset,
     control,
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isSubmitSuccessful },
   } = useForm({
     errors: invite.data,
     resolver: validator.resolver,
@@ -79,10 +83,17 @@ export function InvitePlayersToTeamDialog({ team }: Props) {
     });
   });
 
+  useEffect(() => {
+    if (inviteSccess && isSubmitSuccessful) {
+      reset({ players: [] });
+      setOpen(false);
+    }
+  }, [inviteSccess, isSubmitSuccessful]);
+
   const players = useFieldArray({ control, name: 'players', keyName: 'RHF_ID' });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Invite Players</Button>
       </DialogTrigger>

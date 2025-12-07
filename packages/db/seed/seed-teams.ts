@@ -7,6 +7,7 @@ import type { DrizzleDB } from './types';
 export interface SeedTeamsResult {
   teams: (typeof team.$inferInsert)[];
   teamMembers: (typeof teamMember.$inferInsert)[];
+  teamsWithCaptains: Array<{ id: string; captainId: string }>;
 }
 
 export async function seedTeams(db: DrizzleDB, users: { id: string }[], teamCount: number) {
@@ -39,5 +40,12 @@ export async function seedTeams(db: DrizzleDB, users: { id: string }[], teamCoun
   });
   await db.insert(teamMember).values(teamMembers);
   console.log(`seed-teams: inserted ${teamMembers.length} team members`);
-  return { teams, teamMembers };
+
+  // Extract team-captain mappings for downstream use
+  const teamsWithCaptains = teams.map(t => ({
+    id: t.id,
+    captainId: teamMembers.find(m => m.teamId === t.id && m.role === 'CAPTAIN')!.userId,
+  }));
+
+  return { teams, teamMembers, teamsWithCaptains };
 }

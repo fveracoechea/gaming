@@ -92,7 +92,7 @@ export const teamInvite = t.pgTable('team_invite', {
     .text()
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
-  role: t.varchar().$type<TeamMemberRole>().notNull().default('PLAYER'),
+  role: t.varchar().$type<Exclude<TeamMemberRole, 'CAPTAIN'>>().notNull().default('PLAYER'),
   status: t.varchar().$type<TeamInviteStatus>().notNull().default('PENDING'),
   ...timestamps,
 });

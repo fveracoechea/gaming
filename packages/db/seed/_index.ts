@@ -15,6 +15,7 @@ import { seedGames } from './seed-games';
 import { seedInboxMessages } from './seed-inbox';
 import { seedMatches } from './seed-matches';
 import { seedPlayerProfiles } from './seed-player-profiles';
+import { seedTeamInvites } from './seed-team-invites';
 import { seedTeams } from './seed-teams';
 import { seedTournaments } from './seed-tournaments';
 import { seedUsers } from './seed-users';
@@ -77,7 +78,7 @@ async function main() {
   if (force) {
     console.log('Forced reseed requested -- truncating tables...');
     await db.execute(
-      sql`TRUNCATE TABLE inbox, match_team_participant, match_participant, match, payment, payout, tournament_team_participant, tournament_participant, tournament_invite, team_member, team, player_profile, tournament, game RESTART IDENTITY CASCADE`,
+      sql`TRUNCATE TABLE inbox, match_team_participant, match_participant, match, payment, payout, tournament_team_participant, tournament_participant, tournament_invite, team_invite, team_member, team, player_profile, tournament, game RESTART IDENTITY CASCADE`,
     );
     console.log('Truncate complete.');
   }
@@ -91,7 +92,14 @@ async function main() {
     users.map(u => u.id),
   );
   const { games } = await seedGames(db);
-  const { teams, teamMembers } = await seedTeams(db, users, counts.teams);
+  const { teams, teamMembers, teamsWithCaptains } = await seedTeams(db, users, counts.teams);
+
+  // Seed team invites after teams are created
+  const { teamInvites } = await seedTeamInvites(db, {
+    teams: teamsWithCaptains,
+    users,
+  });
+
   const { tournaments, userParticipants, teamParticipants } = await seedTournaments(
     db,
     users,
@@ -125,6 +133,7 @@ async function main() {
     games: games.length,
     teams: teams.length,
     teamMembers: teamMembers.length,
+    teamInvites: teamInvites.length,
     tournaments: tournaments.length,
     userParticipants: userParticipants.length,
     teamParticipants: teamParticipants.length,

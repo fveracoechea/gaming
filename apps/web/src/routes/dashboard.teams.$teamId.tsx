@@ -2,6 +2,7 @@ import { getORPCClient } from '@/lib/middlewares.server';
 import { DeleteTeamDialog } from '@/resources/team.delete.$teamId';
 import { TeamEditForm } from '@/resources/team.edit.$teamId';
 import { InvitePlayersToTeamDialog } from '@/resources/team.invite.$teamId';
+import { WithdrawInviteButton } from '@/resources/team.withdraw-invite.$inviteId';
 import { getTeamPlaceholderImage } from '@/utils/team';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
@@ -21,12 +22,17 @@ import type { Route } from './+types/dashboard.teams.$teamId';
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const rpc = getORPCClient(context);
-  const team = await rpc.team.findById(params.teamId);
-  return { team };
+  const [team, invites] = await Promise.all([
+    rpc.team.findById(params.teamId),
+    rpc.team.listTeamInvites({ teamId: params.teamId }),
+  ]);
+  return { team, invites };
 }
 
 export default function TeamDetails({ loaderData }: Route.ComponentProps) {
-  const { team } = loaderData;
+  const { team, invites } = loaderData;
+  const pendingInvites = invites.filter(inv => inv.status === 'PENDING');
+
   return (
     <div className="@container space-y-6">
       <header className="flex items-center gap-4">
@@ -48,15 +54,14 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
       <Card>
         <CardHeader>
           <CardTitle>Team Roster</CardTitle>
-          <CardDescription>
-            List of players, coaches, and staff associated with your team
-          </CardDescription>
+          <CardDescription>Active members and pending invites for your team</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Active Members */}
           {team.members.map(member => (
             <div
               key={member.id}
-              className="flex items-center justify-between px-4  py-2 even:bg-muted/50"
+              className="flex items-center justify-between px-4 py-2 even:bg-muted/50"
             >
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-sm font-medium">
@@ -76,6 +81,39 @@ export default function TeamDetails({ loaderData }: Route.ComponentProps) {
                 <Button variant="ghost" size="icon-sm" aria-label="Remove Member">
                   <TrashIcon />
                 </Button>
+              </div>
+            </div>
+          ))}
+
+          {/* Pending Invites */}
+          {pendingInvites.map(invite => (
+            <div
+              key={invite.id}
+              className="flex items-center justify-between px-4 py-2 even:bg-muted/50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed bg-muted/50 text-sm font-medium">
+                  {getInitials(invite.invitedUser.name)}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm leading-none font-medium">{invite.invitedUser.name}</p>
+                  <span className="text-xs text-muted-foreground">
+                    Invited {formatDistanceToNow(invite.createdAt, { addSuffix: true })}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Badge variant="outline">{invite.role}</Badge>
+                <Badge
+                  variant="secondary"
+                  className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20"
+                >
+                  PENDING
+                </Badge>
+                <WithdrawInviteButton
+                  inviteId={invite.id}
+                  playerName={invite.invitedUser.name}
+                />
               </div>
             </div>
           ))}
