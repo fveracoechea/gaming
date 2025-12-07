@@ -3,15 +3,10 @@ import { Form, data } from 'react-router';
 import { getORPCClient } from '@/lib/middlewares.server';
 import { Badge } from '@gaming/ui/components/badge';
 import { Button } from '@gaming/ui/components/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@gaming/ui/components/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@gaming/ui/components/card';
 import { H1, Typography } from '@gaming/ui/components/typography';
 import type { InboxData } from '@gaming/zod/inbox';
+import clsx from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
 import {
   BellIcon,
@@ -152,13 +147,13 @@ export default function InboxPage({ loaderData }: Route.ComponentProps) {
       </div>
 
       {messages.length === 0 && (
-        <Card className="flex flex-col justify-center items-center p-12 gap-3">
+        <div className="flex flex-col justify-center items-center p-12 gap-3">
           <MailIcon className="h-24 w-24 stroke-muted" />
           <Typography variant="muted">Your inbox is empty.</Typography>
           <Typography variant="base">
             You'll receive notifications about team invites, tournaments, and more.
           </Typography>
-        </Card>
+        </div>
       )}
 
       <div className="space-y-3">
@@ -168,15 +163,16 @@ export default function InboxPage({ loaderData }: Route.ComponentProps) {
           return (
             <Card
               key={message.id}
-              className={isUnread ? 'border-l-4 border-l-primary bg-primary/5' : ''}
+              className={clsx(isUnread && 'border-l-4 border-l-primary bg-primary/5')}
             >
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                        isUnread ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                      }`}
+                      className={clsx(
+                        'flex h-10 w-10 items-center justify-center rounded-full',
+                        isUnread ? 'bg-primary text-primary-foreground' : 'bg-muted',
+                      )}
                     >
                       {getMessageIcon(message.data.type)}
                     </div>

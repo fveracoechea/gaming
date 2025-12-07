@@ -25,6 +25,7 @@ export type PlayerSearchData = PlayerSearchResult['players'][number];
 export async function loader({ context, request }: Route.LoaderArgs) {
   const rpc = getORPCClient(context);
   const { searchParams } = new URL(request.url);
+  if (!searchParams.get('query')) return { players: [] };
 
   const players = await rpc.player.search(
     parseURLSearchParams(SearchPlayersSchema, searchParams),
@@ -59,7 +60,7 @@ export function PlayerSearchCombobox(props: Props) {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+      <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search for players..."
@@ -67,7 +68,7 @@ export function PlayerSearchCombobox(props: Props) {
             value={search}
             onValueChange={v => {
               setSearch(v);
-              if (v) fetcher.load(href('/resource/player/search/combobox') + `?query=${v}`);
+              fetcher.load(href('/resource/player/search/combobox') + `?query=${v}`);
             }}
           />
           <CommandList>
