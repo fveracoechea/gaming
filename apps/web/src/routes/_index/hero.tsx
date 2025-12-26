@@ -54,15 +54,15 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button size="xl" className="group" asChild>
+            <Button size="lg" className="group" asChild>
               <Link to={href('/dashboard')}>
                 <span>Start Free Trial</span>
                 <ArrowRight className="ml-2 h-6 w-6 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button size="xl" variant="outline" className="font-semibold">
-              <Play className="mr-2 h-4 w-4" />
+            <Button size="lg" variant="outline" className="group font-semibold">
               <span>Watch Demo</span>
+              <Play className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
 

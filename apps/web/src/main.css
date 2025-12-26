@@ -1,2 +1,3 @@
-@import "tailwindcss";
-@import "@gaming/ui/theme.css";
+@import 'tailwindcss';
+
+@import '@gaming/ui/theme.css';

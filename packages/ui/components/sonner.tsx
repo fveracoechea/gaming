@@ -1,5 +1,3 @@
-'use client';
-
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -11,7 +9,7 @@ import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 export { toast, type ToasterProps } from 'sonner';
 
-const Toaster = ({ ...props }: ToasterProps) => {
+export function Toaster(props: ToasterProps) {
   return (
     <Sonner
       className="toaster group"
@@ -33,6 +31,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
       {...props}
     />
   );
-};
-
-export { Toaster };
+}

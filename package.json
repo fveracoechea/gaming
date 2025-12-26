@@ -43,7 +43,7 @@
     "db:start": "turbo -F @gaming/db db:start",
     "db:stop": "turbo -F @gaming/db db:stop",
     "db:studio": "turbo -F @gaming/db db:studio",
-    "db:watch": "turbo -F @gaming/db db:watch",
+    "db:studio:local": "bun run --env-file=infra/.env.local db:studio",
     "prettier:check": "prettier '**/*.{js,ts,jsx,tsx,json}' --check",
     "prettier:write": "prettier '**/*.{js,ts,jsx,tsx,json}' --write",
     "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
@@ -51,8 +51,8 @@
     "web:build": "bun run -F web build",
     "web:start": "bun run -F web start",
     "dev": "turbo dev",
-    "local:dev": "bun run --env-file=infra/.env.local dev",
-    "dev:dev": "bun run --env-file=infra/.env.development dev"
+    "dev:local": "bun run --env-file=infra/.env.local dev",
+    "dev:development": "bun run --env-file=infra/.env.development dev"
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
