@@ -67,8 +67,8 @@ export default function MyTeamPage({ loaderData }: Route.ComponentProps) {
       <div className="grid grid-cols-1 gap-6 @6xl:grid-cols-2">
         {teams.map(team => {
           return (
-            <Link to={href('/dashboard/teams/:teamId', { teamId: team.id })}>
-              <Card className="group transition-colors hover:border-primary">
+            <Link to={href('/dashboard/teams/:teamId', { teamId: team.id })} className="group">
+              <Card className="transition-colors border border-border group-hover:border-primary-foreground">
                 <CardHeader className="flex flex-row items-start justify-between space-y-0">
                   <div className="flex items-center gap-4">
                     <img
